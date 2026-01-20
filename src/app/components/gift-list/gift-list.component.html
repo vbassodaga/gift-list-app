@@ -1,0 +1,190 @@
+<div class="gifts-container">
+  <div class="container mx-auto px-4">
+    <h1 class="page-title animate-fade-in">Lista de Presentes</h1>
+    <p class="page-subtitle animate-fade-in">
+      Escolha um presente da nossa lista e marque-o como comprado
+    </p>
+
+    <!-- Add Gift Button (Admin Only) -->
+    <div class="mb-6 flex justify-center" *ngIf="currentUser && currentUser.isAdmin">
+      <p-button 
+        label="Adicionar Novo Presente" 
+        icon="pi pi-plus" 
+        (onClick)="showAddDialog = true"
+        styleClass="p-button-primary p-button-lg">
+      </p-button>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="text-center py-12">
+      <i class="pi pi-spin pi-spinner text-4xl text-indigo-400"></i>
+      <p class="mt-4 text-gray-400">Carregando presentes...</p>
+    </div>
+
+    <!-- Gift Grid -->
+    <div *ngIf="!loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+      <app-gift-card 
+        *ngFor="let gift of gifts" 
+        [gift]="gift"
+        [currentUser]="currentUser"
+        (purchase)="openPurchaseDialog(gift)"
+        (edit)="openEditDialog(gift)"
+        (delete)="confirmDelete(gift)"
+        (unpurchase)="confirmUnpurchase(gift)">
+      </app-gift-card>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && gifts.length === 0" class="empty-state animate-fade-in">
+      <i class="pi pi-gift text-6xl text-gray-600 mb-4"></i>
+      <p class="text-xl text-gray-400">Nenhum presente na lista ainda.</p>
+      <p class="text-gray-500 mt-2">Clique em "Adicionar Novo Presente" para começar!</p>
+    </div>
+
+  <!-- Add Gift Dialog -->
+  <p-dialog 
+    [(visible)]="showAddDialog" 
+    header="Adicionar Novo Presente" 
+    [modal]="true" 
+    [style]="{width: '95%', maxWidth: '500px'}"
+    [closable]="true"
+    [breakpoints]="{'960px': '95%'}"
+    [draggable]="false"
+    [resizable]="false">
+    <div class="flex flex-col gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">Nome do Presente *</label>
+        <input 
+          type="text" 
+          pInputText 
+          [(ngModel)]="newGift.name" 
+          placeholder="Digite o nome do presente"
+          class="w-full" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">Descrição</label>
+        <textarea 
+          pInputTextarea 
+          [(ngModel)]="newGift.description" 
+          placeholder="Digite a descrição do presente"
+          rows="3"
+          class="w-full">
+        </textarea>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">URL da Imagem *</label>
+        <input 
+          type="text" 
+          pInputText 
+          [(ngModel)]="newGift.imageUrl" 
+          placeholder="https://exemplo.com/imagem.jpg"
+          class="w-full" />
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button 
+        label="Cancelar" 
+        icon="pi pi-times" 
+        (onClick)="cancelAdd()"
+        styleClass="p-button-text">
+      </p-button>
+      <p-button 
+        label="Adicionar" 
+        icon="pi pi-check" 
+        (onClick)="addGift()"
+        styleClass="p-button-primary">
+      </p-button>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Purchase Confirmation Dialog -->
+  <p-dialog 
+    [(visible)]="purchaseDialogVisible" 
+    header="Marcar Presente como Comprado" 
+    [modal]="true" 
+    [style]="{width: '95%', maxWidth: '400px'}"
+    [closable]="true"
+    [breakpoints]="{'960px': '95%'}"
+    [draggable]="false"
+    [resizable]="false">
+    <div class="flex flex-col gap-4">
+      <p class="text-gray-300">
+        Você está prestes a marcar <strong>{{ selectedGift?.name }}</strong> como comprado.
+      </p>
+      <p class="text-sm text-gray-400" *ngIf="currentUser">
+        Comprador: <strong>{{ currentUser.fullName }}</strong>
+      </p>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button 
+        label="Cancelar" 
+        icon="pi pi-times" 
+        (onClick)="cancelPurchase()"
+        styleClass="p-button-text">
+      </p-button>
+      <p-button 
+        label="Confirmar Compra" 
+        icon="pi pi-check" 
+        (onClick)="confirmPurchase()"
+        styleClass="p-button-success">
+      </p-button>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Edit Gift Dialog -->
+  <p-dialog 
+    [(visible)]="showEditDialog" 
+    header="Editar Presente" 
+    [modal]="true" 
+    [style]="{width: '95%', maxWidth: '500px'}"
+    [closable]="true"
+    [breakpoints]="{'960px': '95%'}"
+    [draggable]="false"
+    [resizable]="false">
+    <div class="flex flex-col gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">Nome do Presente *</label>
+        <input 
+          type="text" 
+          pInputText 
+          [(ngModel)]="editGift.name" 
+          placeholder="Digite o nome do presente"
+          class="w-full" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">Descrição</label>
+        <textarea 
+          pInputTextarea 
+          [(ngModel)]="editGift.description" 
+          placeholder="Digite a descrição do presente"
+          rows="3"
+          class="w-full">
+        </textarea>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">URL da Imagem *</label>
+        <input 
+          type="text" 
+          pInputText 
+          [(ngModel)]="editGift.imageUrl" 
+          placeholder="https://exemplo.com/imagem.jpg"
+          class="w-full" />
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button 
+        label="Cancelar" 
+        icon="pi pi-times" 
+        (onClick)="cancelEdit()"
+        styleClass="p-button-text">
+      </p-button>
+      <p-button 
+        label="Salvar" 
+        icon="pi pi-check" 
+        (onClick)="saveEdit()"
+        styleClass="p-button-primary">
+      </p-button>
+    </ng-template>
+  </p-dialog>
+</div>
+

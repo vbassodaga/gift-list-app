@@ -1,0 +1,28 @@
+<nav class="navbar animate-fade-in" *ngIf="currentUser$ | async">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <span class="brand-icon"><i class="pi pi-home text-6xl text-indigo-400"></i></span>
+      <span class="brand-text">Apêr</span>
+      <span class="second-brand-text">rtou</span>
+    </div>
+    
+    <div class="navbar-menu">
+      <button 
+        (click)="navigateTo('/')"
+        [class.active]="isActive('/')"
+        class="navbar-item">
+        <i class="pi pi-home"></i>
+        <span>Home</span>
+      </button>
+      
+      <button 
+        (click)="navigateTo('/gifts')"
+        [class.active]="isActive('/gifts')"
+        class="navbar-item">
+        <i class="pi pi-gift"></i>
+        <span>Presentes</span>
+      </button>
+    </div>
+  </div>
+</nav>
+

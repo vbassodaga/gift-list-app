@@ -1,0 +1,29 @@
+::ng-deep .p-card {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border: 2px solid #333333;
+  transition: all 0.3s ease;
+  color: #ffffff;
+  
+  &:hover {
+    border-color: #6366f1;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+  }
+  
+  .p-card-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  
+  .p-card-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  
+  .p-card-footer {
+    border-top: 1px solid #333333;
+  }
+}
+

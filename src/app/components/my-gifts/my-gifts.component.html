@@ -1,0 +1,39 @@
+<div class="my-gifts-container">
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="page-title animate-fade-in">Meus Presentes</h1>
+    <p class="page-subtitle animate-fade-in">
+      Aqui estão os presentes que você escolheu comprar
+    </p>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="text-center py-12">
+      <i class="pi pi-spin pi-spinner text-4xl text-indigo-400"></i>
+      <p class="mt-4 text-gray-400">Carregando presentes...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && myGifts.length === 0" class="empty-state animate-fade-in">
+      <i class="pi pi-gift text-6xl text-gray-600 mb-4"></i>
+      <h2 class="text-2xl font-bold text-gray-400 mb-2">Nenhum presente selecionado</h2>
+      <p class="text-gray-500 mb-6">
+        Você ainda não selecionou nenhum presente. Vá até a página de Presentes e escolha o seu!
+      </p>
+      <p-button 
+        label="Ver Presentes" 
+        icon="pi pi-gift"
+        (click)="router.navigate(['/gifts'])"
+        styleClass="p-button-primary">
+      </p-button>
+    </div>
+
+    <!-- Gifts Grid -->
+    <div *ngIf="!loading && myGifts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
+      <app-gift-card 
+        *ngFor="let gift of myGifts" 
+        [gift]="gift"
+        (purchase)="null">
+      </app-gift-card>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,84 @@
+<div class="login-container">
+  <div class="login-card animate-fade-in">
+    <button 
+      (click)="goBack()"
+      class="back-btn">
+      <i class="pi pi-arrow-left"></i>
+    </button>
+
+    <div class="login-header">
+      <h2 class="login-title">Entrar</h2>
+      <p class="login-subtitle">Entre com suas credenciais</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <!-- Phone Number -->
+      <div class="form-group">
+        <label for="phoneNumber" class="form-label">
+          Telefone (com DDD) <span class="text-red-500">*</span>
+        </label>
+        <input
+          id="phoneNumber"
+          type="text"
+          pInputText
+          formControlName="phoneNumber"
+          (input)="formatPhoneNumber($event)"
+          [class.ng-invalid]="phoneNumber?.invalid && phoneNumber?.touched"
+          [class.ng-valid]="phoneNumber?.valid && phoneNumber?.touched"
+          placeholder="(00) 00000-0000"
+          maxlength="15"
+          class="w-full"
+        />
+        <small
+          *ngIf="phoneNumber?.invalid && phoneNumber?.touched"
+          class="error-text">
+          <span *ngIf="phoneNumber?.errors?.['required']">Telefone é obrigatório.</span>
+          <span *ngIf="phoneNumber?.errors?.['pattern']">Digite um telefone válido no formato (00) 00000-0000.</span>
+        </small>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password" class="form-label">
+          Senha <span class="text-red-500">*</span>
+        </label>
+        <input
+          id="password"
+          type="password"
+          pInputText
+          formControlName="password"
+          [class.ng-invalid]="password?.invalid && password?.touched"
+          [class.ng-valid]="password?.valid && password?.touched"
+          placeholder="Digite sua senha"
+          class="w-full"
+        />
+        <small
+          *ngIf="password?.invalid && password?.touched"
+          class="error-text">
+          <span *ngIf="password?.errors?.['required']">Senha é obrigatória.</span>
+        </small>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="form-actions">
+        <button
+          type="submit"
+          pButton
+          label="Entrar"
+          [disabled]="loginForm.invalid || loading"
+          [loading]="loading"
+          class="submit-btn">
+        </button>
+      </div>
+
+      <!-- Register Link -->
+      <div class="register-link">
+        <p class="link-text">
+          Não tem uma conta?
+          <a (click)="goToRegister()" class="link">Cadastre-se</a>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>
+

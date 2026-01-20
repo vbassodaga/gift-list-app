@@ -1,0 +1,163 @@
+<div class="register-container">
+  <div class="register-card animate-fade-in">
+    <button 
+      (click)="goBack()"
+      class="back-btn">
+      <i class="pi pi-arrow-left"></i>
+    </button>
+
+    <div class="register-header">
+      <h2 class="register-title">Cadastro de Usuário</h2>
+      <p class="register-subtitle">Preencha os dados para se cadastrar</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- First Name -->
+        <div class="md:col-span-1">
+          <label for="firstName" class="block text-sm font-medium text-gray-300 mb-1">
+            Nome <span class="text-red-500">*</span>
+          </label>
+          <input
+            id="firstName"
+            type="text"
+            pInputText
+            formControlName="firstName"
+            [class.ng-invalid]="firstName?.invalid && firstName?.touched"
+            [class.ng-valid]="firstName?.valid && firstName?.touched"
+            placeholder="Digite seu nome"
+            class="w-full"
+          />
+          <small
+            *ngIf="firstName?.invalid && firstName?.touched"
+            class="text-red-500 text-xs"
+          >
+            <span *ngIf="firstName?.errors?.['required']">Nome é obrigatório.</span>
+            <span *ngIf="firstName?.errors?.['minlength']">Nome deve ter pelo menos 2 caracteres.</span>
+            <span *ngIf="firstName?.errors?.['maxlength']">Nome deve ter no máximo 100 caracteres.</span>
+          </small>
+        </div>
+
+        <!-- Last Name -->
+        <div class="md:col-span-1">
+          <label for="lastName" class="block text-sm font-medium text-gray-300 mb-1">
+            Sobrenome <span class="text-red-500">*</span>
+          </label>
+          <input
+            id="lastName"
+            type="text"
+            pInputText
+            formControlName="lastName"
+            [class.ng-invalid]="lastName?.invalid && lastName?.touched"
+            [class.ng-valid]="lastName?.valid && lastName?.touched"
+            placeholder="Digite seu sobrenome"
+            class="w-full"
+          />
+          <small
+            *ngIf="lastName?.invalid && lastName?.touched"
+            class="text-red-500 text-xs"
+          >
+            <span *ngIf="lastName?.errors?.['required']">Sobrenome é obrigatório.</span>
+            <span *ngIf="lastName?.errors?.['minlength']">Sobrenome deve ter pelo menos 2 caracteres.</span>
+            <span *ngIf="lastName?.errors?.['maxlength']">Sobrenome deve ter no máximo 100 caracteres.</span>
+          </small>
+        </div>
+      </div>
+
+      <!-- Phone Number -->
+      <div>
+        <label for="phoneNumber" class="block text-sm font-medium text-gray-300 mb-1">
+          Telefone (com DDD) <span class="text-red-500">*</span>
+        </label>
+        <input
+          id="phoneNumber"
+          type="text"
+          pInputText
+          formControlName="phoneNumber"
+          (input)="formatPhoneNumber($event)"
+          [class.ng-invalid]="phoneNumber?.invalid && phoneNumber?.touched"
+          [class.ng-valid]="phoneNumber?.valid && phoneNumber?.touched"
+          placeholder="(00) 00000-0000"
+          maxlength="15"
+          class="w-full"
+        />
+        <small
+          *ngIf="phoneNumber?.invalid && phoneNumber?.touched"
+          class="text-red-500 text-xs"
+        >
+          <span *ngIf="phoneNumber?.errors?.['required']">Telefone é obrigatório.</span>
+          <span *ngIf="phoneNumber?.errors?.['pattern']">Digite um telefone válido no formato (00) 00000-0000.</span>
+        </small>
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-300 mb-1">
+          Senha <span class="text-red-500">*</span>
+        </label>
+        <input
+          id="password"
+          type="password"
+          pInputText
+          formControlName="password"
+          [class.ng-invalid]="password?.invalid && password?.touched"
+          [class.ng-valid]="password?.valid && password?.touched"
+          placeholder="Mínimo 6 caracteres"
+          class="w-full"
+        />
+        <small
+          *ngIf="password?.invalid && password?.touched"
+          class="text-red-500 text-xs"
+        >
+          <span *ngIf="password?.errors?.['required']">Senha é obrigatória.</span>
+          <span *ngIf="password?.errors?.['minlength']">Senha deve ter pelo menos 6 caracteres.</span>
+        </small>
+      </div>
+
+      <!-- Confirm Password -->
+      <div>
+        <label for="confirmPassword" class="block text-sm font-medium text-gray-300 mb-1">
+          Confirmar Senha <span class="text-red-500">*</span>
+        </label>
+        <input
+          id="confirmPassword"
+          type="password"
+          pInputText
+          formControlName="confirmPassword"
+          [class.ng-invalid]="(confirmPassword?.invalid || registerForm.errors?.['passwordMismatch']) && confirmPassword?.touched"
+          [class.ng-valid]="confirmPassword?.valid && !registerForm.errors?.['passwordMismatch'] && confirmPassword?.touched"
+          placeholder="Digite a senha novamente"
+          class="w-full"
+        />
+        <small
+          *ngIf="(confirmPassword?.invalid || registerForm.errors?.['passwordMismatch']) && confirmPassword?.touched"
+          class="text-red-500 text-xs"
+        >
+          <span *ngIf="confirmPassword?.errors?.['required']">Confirmação de senha é obrigatória.</span>
+          <span *ngIf="registerForm.errors?.['passwordMismatch']">As senhas não coincidem.</span>
+        </small>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="form-actions">
+        <button
+          type="submit"
+          pButton
+          label="Cadastrar"
+          [disabled]="registerForm.invalid || loading"
+          [loading]="loading"
+          class="submit-btn"
+        ></button>
+      </div>
+
+      <!-- Login Link -->
+      <div class="login-link">
+        <p class="link-text">
+          Já tem uma conta?
+          <a (click)="goToLogin()" class="link">Entre</a>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>
+

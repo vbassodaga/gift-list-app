@@ -1,0 +1,77 @@
+<p-card 
+  [style]="{'height': '100%', 'display': 'flex', 'flex-direction': 'column'}"
+  styleClass="h-full flex flex-col shadow-lg hover:shadow-xl transition-shadow duration-300">
+  <ng-template pTemplate="header">
+    <div class="relative">
+      <img 
+        [src]="gift.imageUrl" 
+        [alt]="gift.name"
+        class="w-full h-48 sm:h-56 md:h-64 object-cover"
+        (error)="onImageError($event)"
+        loading="lazy" />
+      <p-tag 
+        *ngIf="gift.isPurchased" 
+        value="Comprado" 
+        severity="success"
+        styleClass="absolute top-2 right-2">
+      </p-tag>
+    </div>
+  </ng-template>
+  
+  <div class="flex flex-col flex-grow">
+    <h3 class="text-xl font-bold text-white mb-2">{{ gift.name }}</h3>
+    <p class="text-gray-400 text-sm mb-4 flex-grow">{{ gift.description || 'Sem descrição disponível.' }}</p>
+    
+    <div *ngIf="gift.isPurchased && gift.purchasedBy && currentUser && !userService.isAdmin()" class="mb-3">
+      <p class="text-sm text-gray-400">
+        <i class="pi pi-user mr-1"></i>
+        Comprado por: <span class="font-semibold text-indigo-400">{{ gift.purchasedBy }}</span>
+      </p>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <!-- Admin Actions -->
+    <div *ngIf="currentUser && userService.isAdmin()" class="flex gap-2">
+      <p-button 
+        label="Editar" 
+        icon="pi pi-pencil" 
+        (onClick)="onEdit()"
+        styleClass="flex-1 p-button-outlined">
+      </p-button>
+      <p-button 
+        label="Deletar" 
+        icon="pi pi-trash" 
+        (onClick)="onDelete()"
+        styleClass="flex-1 p-button-danger">
+      </p-button>
+    </div>
+
+    <!-- Simple User Actions -->
+    <div *ngIf="currentUser && !userService.isAdmin()">
+      <p-button 
+        *ngIf="!gift.isPurchased"
+        label="Eu Vou Comprar" 
+        icon="pi pi-shopping-cart" 
+        (onClick)="onPurchase()"
+        styleClass="w-full p-button-primary">
+      </p-button>
+      <div *ngIf="gift.isPurchased">
+        <p-button 
+          label="Já Comprado" 
+          icon="pi pi-check-circle" 
+          styleClass="w-full p-button-success mb-2"
+          [disabled]="true">
+        </p-button>
+        <p-button 
+          *ngIf="canUnpurchase()"
+          label="Remover Marcação" 
+          icon="pi pi-times" 
+          (onClick)="onUnpurchase()"
+          styleClass="w-full p-button-outlined">
+        </p-button>
+      </div>
+    </div>
+  </ng-template>
+</p-card>
+

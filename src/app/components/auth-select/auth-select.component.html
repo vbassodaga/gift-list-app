@@ -1,0 +1,33 @@
+<div class="auth-select-container">
+  <div class="auth-select-card animate-fade-in">
+    <div class="auth-select-header">
+      <h2 class="auth-select-title">Bem-vindo!</h2>
+      <p class="auth-select-subtitle">Escolha uma opção para continuar</p>
+    </div>
+
+    <div class="auth-select-options">
+      <button 
+        (click)="goToLogin()"
+        class="auth-option-btn login-option">
+        <i class="pi pi-sign-in"></i>
+        <span>Entrar</span>
+        <p class="option-description">Já tenho uma conta</p>
+      </button>
+
+      <button 
+        (click)="goToRegister()"
+        class="auth-option-btn register-option">
+        <i class="pi pi-user-plus"></i>
+        <span>Cadastrar</span>
+        <p class="option-description">Criar nova conta</p>
+      </button>
+    </div>
+
+    <button 
+      (click)="closeModal()"
+      class="close-btn">
+      <i class="pi pi-times"></i>
+    </button>
+  </div>
+</div>
+

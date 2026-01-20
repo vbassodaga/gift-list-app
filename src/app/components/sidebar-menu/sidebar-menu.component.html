@@ -1,0 +1,73 @@
+<!-- Floating Menu Button -->
+<button 
+  (click)="toggleSidebar()"
+  class="floating-menu-button animate-fade-in"
+  type="button"
+  aria-label="Menu">
+  <i class="pi pi-bars text-xl"></i>
+</button>
+
+<!-- Sidebar -->
+<p-sidebar 
+  [(visible)]="sidebarVisible" 
+  position="right"
+  [modal]="true"
+  [dismissible]="true"
+  styleClass="custom-sidebar">
+  
+  <ng-template pTemplate="header">
+    <h3 class="sidebar-header">Menu</h3>
+  </ng-template>
+
+  <div class="sidebar-content">
+    <ng-container *ngIf="currentUser$ | async as user; else notLoggedIn">
+      <!-- Logged In Menu -->
+      <div class="user-info">
+        <div class="user-avatar">
+          <i class="pi pi-user text-2xl"></i>
+        </div>
+        <div class="user-details">
+          <p class="user-name">{{ user.fullName }}</p>
+          <p class="user-phone">{{ user.phoneNumber }}</p>
+        </div>
+      </div>
+
+      <div class="sidebar-divider" *ngIf="!user.isAdmin"></div>
+
+      <button 
+        *ngIf="!user.isAdmin"
+        (click)="goToMyGifts()"
+        class="sidebar-menu-item">
+        <i class="pi pi-gift"></i>
+        <span>Meus Presentes</span>
+      </button>
+
+      <div class="sidebar-divider"></div>
+
+      <button 
+        (click)="logout()"
+        class="sidebar-menu-item logout-item">
+        <i class="pi pi-sign-out"></i>
+        <span>Sair</span>
+      </button>
+    </ng-container>
+
+    <ng-template #notLoggedIn>
+      <!-- Not Logged In Menu -->
+      <div class="not-logged-info">
+        <i class="pi pi-user-circle text-6xl text-gray-400"></i>
+        <p class="text-gray-400 mt-4">Faça login para acessar seus presentes</p>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <button 
+        (click)="goToLogin()"
+        class="sidebar-menu-item login-item">
+        <i class="pi pi-sign-in"></i>
+        <span>Login / Cadastro</span>
+      </button>
+    </ng-template>
+  </div>
+</p-sidebar>
+
