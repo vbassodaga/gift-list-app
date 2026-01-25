@@ -2,8 +2,8 @@
   <div class="navbar-container">
     <div class="navbar-brand">
       <span class="brand-icon"><i class="pi pi-home text-6xl text-indigo-400"></i></span>
-      <span class="brand-text">Apêr</span>
-      <span class="second-brand-text">rtou</span>
+      <span class="brand-text">Presen</span>
+      <span class="second-brand-text">teou</span>
     </div>
     
     <div class="navbar-menu">
@@ -21,6 +21,26 @@
         class="navbar-item">
         <i class="pi pi-gift"></i>
         <span>Presentes</span>
+      </button>
+
+      <button 
+        (click)="navigateTo('/cart')"
+        [class.active]="isActive('/cart')"
+        class="navbar-item cart-button">
+        <i class="pi pi-shopping-cart"></i>
+        <span>Carrinho</span>
+        <ng-container *ngIf="cartCount$ | async as count">
+          <span *ngIf="count > 0" class="cart-badge">{{ count }}</span>
+        </ng-container>
+      </button>
+
+      <button 
+        *ngIf="(currentUser$ | async)?.isAdmin"
+        (click)="navigateTo('/users')"
+        [class.active]="isActive('/users')"
+        class="navbar-item">
+        <i class="pi pi-users"></i>
+        <span>Usuários</span>
       </button>
     </div>
   </div>

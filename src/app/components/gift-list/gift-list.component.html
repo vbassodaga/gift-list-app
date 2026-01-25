@@ -51,9 +51,9 @@
     [breakpoints]="{'960px': '95%'}"
     [draggable]="false"
     [resizable]="false">
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-5">
       <div>
-        <label class="block text-sm font-medium text-gray-300 mb-2">Nome do Presente *</label>
+        <label class="block text-sm font-medium text-white mb-2">Nome do Presente *</label>
         <input 
           type="text" 
           pInputText 
@@ -62,7 +62,7 @@
           class="w-full" />
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-300 mb-2">Descrição</label>
+        <label class="block text-sm font-medium text-white mb-2">Descrição</label>
         <textarea 
           pInputTextarea 
           [(ngModel)]="newGift.description" 
@@ -72,7 +72,19 @@
         </textarea>
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-300 mb-2">URL da Imagem *</label>
+        <label class="block text-sm font-medium text-white mb-2">Valor Médio (R$)</label>
+        <input 
+          type="number" 
+          pInputText 
+          [(ngModel)]="newGift.averagePrice" 
+          placeholder="0.00"
+          step="0.01"
+          min="0"
+          class="w-full" />
+        <p class="text-xs text-gray-400 mt-1">Digite o valor médio do presente em reais</p>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-white mb-2">URL da Imagem *</label>
         <input 
           type="text" 
           pInputText 
@@ -82,18 +94,20 @@
       </div>
     </div>
     <ng-template pTemplate="footer">
-      <p-button 
-        label="Cancelar" 
-        icon="pi pi-times" 
-        (onClick)="cancelAdd()"
-        styleClass="p-button-text">
-      </p-button>
-      <p-button 
-        label="Adicionar" 
-        icon="pi pi-check" 
-        (onClick)="addGift()"
-        styleClass="p-button-primary">
-      </p-button>
+      <div class="flex gap-3 justify-end">
+        <p-button 
+          label="Cancelar" 
+          icon="pi pi-times" 
+          (onClick)="cancelAdd()"
+          styleClass="p-button-text">
+        </p-button>
+        <p-button 
+          label="Adicionar" 
+          icon="pi pi-check" 
+          (onClick)="addGift()"
+          styleClass="p-button-primary">
+        </p-button>
+      </div>
     </ng-template>
   </p-dialog>
 
@@ -108,26 +122,28 @@
     [draggable]="false"
     [resizable]="false">
     <div class="flex flex-col gap-4">
-      <p class="text-gray-300">
-        Você está prestes a marcar <strong>{{ selectedGift?.name }}</strong> como comprado.
+      <p class="text-white">
+        Você está prestes a marcar <strong class="text-indigo-400">{{ selectedGift?.name }}</strong> como comprado.
       </p>
-      <p class="text-sm text-gray-400" *ngIf="currentUser">
-        Comprador: <strong>{{ currentUser.fullName }}</strong>
+      <p class="text-sm text-gray-300" *ngIf="currentUser">
+        Comprador: <strong class="text-indigo-400">{{ currentUser.fullName }}</strong>
       </p>
     </div>
     <ng-template pTemplate="footer">
-      <p-button 
-        label="Cancelar" 
-        icon="pi pi-times" 
-        (onClick)="cancelPurchase()"
-        styleClass="p-button-text">
-      </p-button>
-      <p-button 
-        label="Confirmar Compra" 
-        icon="pi pi-check" 
-        (onClick)="confirmPurchase()"
-        styleClass="p-button-success">
-      </p-button>
+      <div class="flex gap-3 justify-end">
+        <p-button 
+          label="Cancelar" 
+          icon="pi pi-times" 
+          (onClick)="cancelPurchase()"
+          styleClass="p-button-text">
+        </p-button>
+        <p-button 
+          label="Confirmar Compra" 
+          icon="pi pi-check" 
+          (onClick)="confirmPurchase()"
+          styleClass="p-button-success">
+        </p-button>
+      </div>
     </ng-template>
   </p-dialog>
 
@@ -141,9 +157,9 @@
     [breakpoints]="{'960px': '95%'}"
     [draggable]="false"
     [resizable]="false">
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-5">
       <div>
-        <label class="block text-sm font-medium text-gray-300 mb-2">Nome do Presente *</label>
+        <label class="block text-sm font-medium text-white mb-2">Nome do Presente *</label>
         <input 
           type="text" 
           pInputText 
@@ -152,7 +168,7 @@
           class="w-full" />
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-300 mb-2">Descrição</label>
+        <label class="block text-sm font-medium text-white mb-2">Descrição</label>
         <textarea 
           pInputTextarea 
           [(ngModel)]="editGift.description" 
@@ -162,7 +178,19 @@
         </textarea>
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-300 mb-2">URL da Imagem *</label>
+        <label class="block text-sm font-medium text-white mb-2">Valor Médio (R$)</label>
+        <input 
+          type="number" 
+          pInputText 
+          [(ngModel)]="editGift.averagePrice" 
+          placeholder="0.00"
+          step="0.01"
+          min="0"
+          class="w-full" />
+        <p class="text-xs text-gray-400 mt-1">Digite o valor médio do presente em reais</p>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-white mb-2">URL da Imagem *</label>
         <input 
           type="text" 
           pInputText 
@@ -172,18 +200,20 @@
       </div>
     </div>
     <ng-template pTemplate="footer">
-      <p-button 
-        label="Cancelar" 
-        icon="pi pi-times" 
-        (onClick)="cancelEdit()"
-        styleClass="p-button-text">
-      </p-button>
-      <p-button 
-        label="Salvar" 
-        icon="pi pi-check" 
-        (onClick)="saveEdit()"
-        styleClass="p-button-primary">
-      </p-button>
+      <div class="flex gap-3 justify-end">
+        <p-button 
+          label="Cancelar" 
+          icon="pi pi-times" 
+          (onClick)="cancelEdit()"
+          styleClass="p-button-text">
+        </p-button>
+        <p-button 
+          label="Salvar" 
+          icon="pi pi-check" 
+          (onClick)="saveEdit()"
+          styleClass="p-button-primary">
+        </p-button>
+      </div>
     </ng-template>
   </p-dialog>
 </div>

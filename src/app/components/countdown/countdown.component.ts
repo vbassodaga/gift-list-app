@@ -18,13 +18,13 @@ export class CountdownComponent implements OnInit, OnDestroy {
   constructor() {
     const now = new Date();
     const currentYear = now.getFullYear();
-    const may19 = new Date(currentYear, 4, 19); // Month is 0-indexed, so 4 = May
+    const march14 = new Date(currentYear, 2, 14); // Month is 0-indexed, so 4 = May
     
     // If May 19 has already passed this year, set it for next year
-    if (may19 < now) {
+    if (march14 < now) {
       this.targetDate = new Date(currentYear + 1, 4, 19);
     } else {
-      this.targetDate = may19;
+      this.targetDate = march14;
     }
   }
 

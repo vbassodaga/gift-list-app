@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
+import { CartService } from '../../services/cart.service';
 import { Observable } from 'rxjs';
 import { User } from '../../models/user.model';
 
@@ -12,12 +13,19 @@ import { User } from '../../models/user.model';
 export class NavbarComponent implements OnInit {
   currentUser$: Observable<User | null>;
   activeRoute: string = '';
+  cartCount$: Observable<number>;
 
   constructor(
     private userService: UserService,
+    private cartService: CartService,
     private router: Router
   ) {
     this.currentUser$ = this.userService.currentUser$;
+    this.cartCount$ = new Observable(observer => {
+      this.cartService.cartItems$.subscribe(items => {
+        observer.next(items.length);
+      });
+    });
   }
 
   ngOnInit(): void {

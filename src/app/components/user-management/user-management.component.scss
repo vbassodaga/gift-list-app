@@ -1,0 +1,129 @@
+.user-management-container {
+  min-height: calc(100vh - 60px);
+  background: linear-gradient(180deg, #000000 0%, #1a1a1a 100%);
+  padding: 2rem 0;
+}
+
+.page-title {
+  font-size: 3rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.page-subtitle {
+  text-align: center;
+  color: #d1d5db;
+  font-size: 1.125rem;
+  margin-bottom: 2rem;
+}
+
+.users-table-container {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border: 2px solid #333333;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-top: 2rem;
+  overflow: hidden;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-table thead {
+  background: rgba(99, 102, 241, 0.1);
+  border-bottom: 2px solid #333333;
+}
+
+.users-table th {
+  padding: 1rem;
+  text-align: left;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.users-table tbody tr {
+  border-bottom: 1px solid #333333;
+  transition: all 0.3s ease;
+}
+
+.users-table tbody tr:hover {
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.users-table td {
+  padding: 1.25rem 1rem;
+  color: #e5e7eb;
+  font-size: 0.9375rem;
+}
+
+.user-id {
+  color: #9ca3af;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.user-name {
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.user-phone {
+  color: #d1d5db;
+  font-family: monospace;
+}
+
+.user-role {
+  .p-tag {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+.user-date {
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
+.user-actions {
+  .p-button {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.875rem !important;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #9ca3af;
+}
+
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .users-table-container {
+    padding: 1rem;
+    overflow-x: auto;
+  }
+
+  .users-table {
+    min-width: 800px;
+  }
+
+  .users-table th,
+  .users-table td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.8125rem;
+  }
+}

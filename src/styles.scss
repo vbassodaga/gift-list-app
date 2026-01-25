@@ -34,14 +34,41 @@ body {
 }
 
 .p-inputtext {
-  background-color: #1a1a1a;
-  border-color: #333333;
-  color: #ffffff;
+  background-color: #1a1a1a !important;
+  border: 2px solid #333333 !important;
+  color: #ffffff !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+}
+
+.p-inputtext:enabled:hover {
+  border-color: #4a4a4a !important;
 }
 
 .p-inputtext:enabled:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.2);
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.2) !important;
+  outline: none !important;
+}
+
+.p-inputtextarea {
+  background-color: #1a1a1a !important;
+  border: 2px solid #333333 !important;
+  color: #ffffff !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+}
+
+.p-inputtextarea:enabled:hover {
+  border-color: #4a4a4a !important;
+}
+
+.p-inputtextarea:enabled:focus {
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.2) !important;
+  outline: none !important;
 }
 
 .p-card {
@@ -52,44 +79,106 @@ body {
 
 .p-button {
   padding: 0.75rem 1.5rem !important;
+  margin: 0 !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+  border: 2px solid transparent !important;
 }
 
 .p-button-primary {
-  background-color: #6366f1;
-  border-color: #6366f1;
+  background-color: #6366f1 !important;
+  border-color: #6366f1 !important;
+  color: #ffffff !important;
   padding: 0.75rem 1.5rem !important;
 }
 
-.p-button-primary:hover {
-  background-color: #4f46e5;
-  border-color: #4f46e5;
+.p-button-primary:hover:not(:disabled) {
+  background-color: #4f46e5 !important;
+  border-color: #4f46e5 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4) !important;
 }
 
 .p-button-success {
+  background-color: #10b981 !important;
+  border-color: #10b981 !important;
+  color: #ffffff !important;
   padding: 0.75rem 1.5rem !important;
+}
+
+.p-button-success:hover:not(:disabled) {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4) !important;
 }
 
 .p-button-danger {
+  background-color: #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
   padding: 0.75rem 1.5rem !important;
+}
+
+.p-button-danger:hover:not(:disabled) {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4) !important;
 }
 
 .p-button-text {
+  color: #9ca3af !important;
   padding: 0.75rem 1.5rem !important;
+  background: transparent !important;
+}
+
+.p-button-text:hover:not(:disabled) {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.05) !important;
 }
 
 .p-button-outlined {
+  background: transparent !important;
+  border: 2px solid #6366f1 !important;
+  color: #6366f1 !important;
   padding: 0.75rem 1.5rem !important;
 }
 
+.p-button-outlined:hover:not(:disabled) {
+  background-color: rgba(99, 102, 241, 0.1) !important;
+  border-color: #6366f1 !important;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+}
+
 .p-dialog {
-  background-color: #1a1a1a;
-  border: 1px solid #333333;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%) !important;
+  border: 2px solid #333333 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
 }
 
 .p-dialog-header {
-  background-color: #1a1a1a;
-  color: #ffffff;
-  border-bottom: 1px solid #333333;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%) !important;
+  color: #ffffff !important;
+  border-bottom: 2px solid #333333 !important;
+  padding: 1.5rem !important;
+  border-radius: 12px 12px 0 0 !important;
+}
+
+.p-dialog-content {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%) !important;
+  color: #ffffff !important;
+  padding: 1.5rem !important;
+}
+
+.p-dialog-footer {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%) !important;
+  border-top: 2px solid #333333 !important;
+  padding: 1.5rem !important;
+  border-radius: 0 0 12px 12px !important;
 }
 
 .p-sidebar {

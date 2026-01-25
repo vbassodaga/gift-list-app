@@ -25,7 +25,7 @@ export class GiftService {
     return this.http.post<Gift>(this.apiUrl, gift, { params });
   }
 
-  updateGift(id: number, gift: { name?: string; description?: string; imageUrl?: string }, userId: number): Observable<void> {
+  updateGift(id: number, gift: { name?: string; description?: string; imageUrl?: string; averagePrice?: number }, userId: number): Observable<void> {
     const params = new HttpParams().set('userId', userId.toString());
     return this.http.put<void>(`${this.apiUrl}/${id}`, gift, { params });
   }

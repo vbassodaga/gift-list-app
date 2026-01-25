@@ -1,13 +1,13 @@
 .floating-menu-button {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: 1.25rem;
+  right: 1.25rem;
   z-index: 1000;
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-  border: none;
+  border: 2px solid rgba(255, 255, 255, 0.1);
   color: white;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
@@ -15,6 +15,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+@media (max-width: 640px) {
+  .floating-menu-button {
+    top: 1rem;
+    right: 1rem;
+    width: 44px;
+    height: 44px;
+  }
 }
 
 .floating-menu-button:hover {
@@ -96,6 +105,12 @@
   margin: 1rem 0;
 }
 
+.navigation-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .sidebar-menu-item {
   width: 100%;
   display: flex;
@@ -110,6 +125,7 @@
   border-radius: 8px;
   transition: all 0.3s ease;
   text-align: left;
+  position: relative;
 }
 
 .sidebar-menu-item:hover {
@@ -117,8 +133,35 @@
   transform: translateX(5px);
 }
 
+.sidebar-menu-item.active {
+  background-color: rgba(99, 102, 241, 0.15);
+  color: #6366f1;
+  border-left: 3px solid #6366f1;
+}
+
 .sidebar-menu-item i {
   font-size: 1.25rem;
+  width: 1.5rem;
+  text-align: center;
+}
+
+.cart-item {
+  position: relative;
+}
+
+.cart-badge-sidebar {
+  position: absolute;
+  right: 1rem;
+  background: #ef4444;
+  color: #ffffff;
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
 }
 
 .login-item {

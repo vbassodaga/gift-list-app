@@ -16,6 +16,9 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { MyGiftsComponent } from './components/my-gifts/my-gifts.component';
 import { AuthSelectComponent } from './components/auth-select/auth-select.component';
 import { UserLoginComponent } from './components/user-login/user-login.component';
+import { CartComponent } from './components/cart/cart.component';
+import { UserManagementComponent } from './components/user-management/user-management.component';
+import { CurrencyBrPipe } from './pipes/currency-br.pipe';
 
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -27,6 +30,7 @@ import { MessageService } from 'primeng/api';
 import { TagModule } from 'primeng/tag';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { SidebarModule } from 'primeng/sidebar';
+import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmationService } from 'primeng/api';
 
 @NgModule({
@@ -41,7 +45,10 @@ import { ConfirmationService } from 'primeng/api';
     NavbarComponent,
     MyGiftsComponent,
     AuthSelectComponent,
-    UserLoginComponent
+    UserLoginComponent,
+    CartComponent,
+    UserManagementComponent,
+    CurrencyBrPipe
   ],
   imports: [
     BrowserModule,
@@ -58,7 +65,8 @@ import { ConfirmationService } from 'primeng/api';
     ToastModule,
     TagModule,
     ConfirmDialogModule,
-    SidebarModule
+    SidebarModule,
+    TooltipModule
   ],
   providers: [MessageService, ConfirmationService],
   bootstrap: [AppComponent]

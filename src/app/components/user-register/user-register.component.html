@@ -11,11 +11,11 @@
       <p class="register-subtitle">Preencha os dados para se cadastrar</p>
     </div>
 
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <!-- First Name -->
         <div class="md:col-span-1">
-          <label for="firstName" class="block text-sm font-medium text-gray-300 mb-1">
+          <label for="firstName" class="block text-sm font-medium text-white mb-2">
             Nome <span class="text-red-500">*</span>
           </label>
           <input
@@ -66,7 +66,7 @@
 
       <!-- Phone Number -->
       <div>
-        <label for="phoneNumber" class="block text-sm font-medium text-gray-300 mb-1">
+        <label for="phoneNumber" class="block text-sm font-medium text-white mb-2">
           Telefone (com DDD) <span class="text-red-500">*</span>
         </label>
         <input
@@ -92,7 +92,7 @@
 
       <!-- Password -->
       <div>
-        <label for="password" class="block text-sm font-medium text-gray-300 mb-1">
+        <label for="password" class="block text-sm font-medium text-white mb-2">
           Senha <span class="text-red-500">*</span>
         </label>
         <input
@@ -116,7 +116,7 @@
 
       <!-- Confirm Password -->
       <div>
-        <label for="confirmPassword" class="block text-sm font-medium text-gray-300 mb-1">
+        <label for="confirmPassword" class="block text-sm font-medium text-white mb-2">
           Confirmar Senha <span class="text-red-500">*</span>
         </label>
         <input

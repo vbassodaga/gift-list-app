@@ -18,7 +18,8 @@ export class GiftListComponent implements OnInit {
   newGift = {
     name: '',
     description: '',
-    imageUrl: ''
+    imageUrl: '',
+    averagePrice: undefined as number | undefined
   };
   purchaseDialogVisible = false;
   selectedGift: Gift | null = null;
@@ -153,7 +154,13 @@ export class GiftListComponent implements OnInit {
       return;
     }
 
-    this.giftService.createGift(this.newGift, this.currentUser.id).subscribe({
+    // Converter preço de reais para centavos se fornecido
+    const giftToCreate = {
+      ...this.newGift,
+      averagePrice: this.newGift.averagePrice ? Math.round(this.newGift.averagePrice * 100) : undefined
+    };
+
+    this.giftService.createGift(giftToCreate, this.currentUser.id).subscribe({
       next: () => {
         this.messageService.add({
           severity: 'success',
@@ -161,7 +168,7 @@ export class GiftListComponent implements OnInit {
           detail: 'Presente adicionado com sucesso!'
         });
         this.showAddDialog = false;
-        this.newGift = { name: '', description: '', imageUrl: '' };
+        this.newGift = { name: '', description: '', imageUrl: '', averagePrice: undefined };
         this.loadGifts();
       },
       error: (error) => {
@@ -178,7 +185,7 @@ export class GiftListComponent implements OnInit {
 
   cancelAdd(): void {
     this.showAddDialog = false;
-    this.newGift = { name: '', description: '', imageUrl: '' };
+    this.newGift = { name: '', description: '', imageUrl: '', averagePrice: undefined };
   }
 
   showEditDialog = false;
@@ -186,7 +193,8 @@ export class GiftListComponent implements OnInit {
   editGift = {
     name: '',
     description: '',
-    imageUrl: ''
+    imageUrl: '',
+    averagePrice: undefined as number | undefined
   };
 
   openEditDialog(gift: Gift): void {
@@ -203,7 +211,8 @@ export class GiftListComponent implements OnInit {
     this.editGift = {
       name: gift.name,
       description: gift.description,
-      imageUrl: gift.imageUrl
+      imageUrl: gift.imageUrl,
+      averagePrice: gift.averagePrice ? gift.averagePrice / 100 : undefined
     };
     this.showEditDialog = true;
   }
@@ -213,7 +222,13 @@ export class GiftListComponent implements OnInit {
       return;
     }
 
-    this.giftService.updateGift(this.editingGift.id, this.editGift, this.currentUser.id).subscribe({
+    // Converter preço de reais para centavos se fornecido
+    const giftToUpdate = {
+      ...this.editGift,
+      averagePrice: this.editGift.averagePrice ? Math.round(this.editGift.averagePrice * 100) : undefined
+    };
+
+    this.giftService.updateGift(this.editingGift.id, giftToUpdate, this.currentUser.id).subscribe({
       next: () => {
         this.messageService.add({
           severity: 'success',
@@ -222,7 +237,7 @@ export class GiftListComponent implements OnInit {
         });
         this.showEditDialog = false;
         this.editingGift = null;
-        this.editGift = { name: '', description: '', imageUrl: '' };
+        this.editGift = { name: '', description: '', imageUrl: '', averagePrice: undefined };
         this.loadGifts();
       },
       error: (error) => {
@@ -240,7 +255,7 @@ export class GiftListComponent implements OnInit {
   cancelEdit(): void {
     this.showEditDialog = false;
     this.editingGift = null;
-    this.editGift = { name: '', description: '', imageUrl: '' };
+    this.editGift = { name: '', description: '', imageUrl: '', averagePrice: undefined };
   }
 
   confirmDelete(gift: Gift): void {

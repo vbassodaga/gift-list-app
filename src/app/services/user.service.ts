@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { User, RegisterUser, LoginUser } from '../models/user.model';
 import { environment } from '../../environments/environment';
@@ -34,6 +34,16 @@ export class UserService {
 
   getUser(id: number): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${id}`);
+  }
+
+  getAllUsers(userId: number): Observable<User[]> {
+    const params = new HttpParams().set('userId', userId.toString());
+    return this.http.get<User[]>(this.apiUrl, { params });
+  }
+
+  updateUserRole(userId: number, targetUserId: number, role: number): Observable<User> {
+    const params = new HttpParams().set('userId', userId.toString());
+    return this.http.put<User>(`${this.apiUrl}/${targetUserId}`, { role }, { params });
   }
 
   setCurrentUser(user: User): void {

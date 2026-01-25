@@ -6,6 +6,8 @@ import { UserRegisterComponent } from './components/user-register/user-register.
 import { UserLoginComponent } from './components/user-login/user-login.component';
 import { AuthSelectComponent } from './components/auth-select/auth-select.component';
 import { MyGiftsComponent } from './components/my-gifts/my-gifts.component';
+import { CartComponent } from './components/cart/cart.component';
+import { UserManagementComponent } from './components/user-management/user-management.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -14,6 +16,8 @@ const routes: Routes = [
   { path: 'register', component: UserRegisterComponent },
   { path: 'gifts', component: GiftListComponent },
   { path: 'my-gifts', component: MyGiftsComponent },
+  { path: 'cart', component: CartComponent },
+  { path: 'users', component: UserManagementComponent },
   { path: '**', redirectTo: '' }
 ];
 

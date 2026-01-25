@@ -1,0 +1,68 @@
+<div class="user-management-container">
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="page-title animate-fade-in">Gerenciamento de Usuários</h1>
+    <p class="page-subtitle animate-fade-in">
+      Gerencie os usuários do sistema e defina permissões de administrador
+    </p>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="text-center py-12">
+      <i class="pi pi-spin pi-spinner text-4xl text-indigo-400"></i>
+      <p class="mt-4 text-gray-400">Carregando usuários...</p>
+    </div>
+
+    <!-- Users Table -->
+    <div *ngIf="!loading" class="users-table-container animate-fade-in">
+      <div class="overflow-x-auto">
+        <table class="users-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome Completo</th>
+              <th>Telefone</th>
+              <th>Cargo</th>
+              <th>Data de Cadastro</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users" class="user-row">
+              <td class="user-id">{{ user.id }}</td>
+              <td class="user-name">
+                <div class="flex items-center gap-2">
+                  <i class="pi pi-user text-indigo-400"></i>
+                  <span>{{ user.fullName }}</span>
+                </div>
+              </td>
+              <td class="user-phone">{{ user.phoneNumber }}</td>
+              <td class="user-role">
+                <p-tag 
+                  [value]="user.isAdmin ? 'Administrador' : 'Usuário'" 
+                  [severity]="user.isAdmin ? 'warning' : 'info'"
+                  styleClass="font-semibold">
+                </p-tag>
+              </td>
+              <td class="user-date">{{ formatDate(user.createdAt) }}</td>
+              <td class="user-actions">
+                <p-button 
+                  [label]="user.isAdmin ? 'Remover Admin' : 'Tornar Admin'"
+                  [icon]="user.isAdmin ? 'pi pi-user-minus' : 'pi pi-user-plus'"
+                  [styleClass]="user.isAdmin ? 'p-button-warning p-button-outlined' : 'p-button-primary'"
+                  (onClick)="toggleAdminRole(user)"
+                  [disabled]="loading"
+                  [loading]="loading">
+                </p-button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="users.length === 0" class="empty-state">
+        <i class="pi pi-users text-6xl text-gray-600 mb-4"></i>
+        <p class="text-xl text-gray-400">Nenhum usuário encontrado.</p>
+      </div>
+    </div>
+  </div>
+</div>

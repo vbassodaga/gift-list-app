@@ -32,15 +32,55 @@
         </div>
       </div>
 
-      <div class="sidebar-divider" *ngIf="!user.isAdmin"></div>
+      <div class="sidebar-divider"></div>
 
-      <button 
-        *ngIf="!user.isAdmin"
-        (click)="goToMyGifts()"
-        class="sidebar-menu-item">
-        <i class="pi pi-gift"></i>
-        <span>Meus Presentes</span>
-      </button>
+      <!-- Navigation Menu -->
+      <div class="navigation-section">
+        <button 
+          (click)="navigateTo('/')"
+          [class.active]="isActive('/')"
+          class="sidebar-menu-item">
+          <i class="pi pi-home"></i>
+          <span>Home</span>
+        </button>
+
+        <button 
+          (click)="navigateTo('/gifts')"
+          [class.active]="isActive('/gifts')"
+          class="sidebar-menu-item">
+          <i class="pi pi-gift"></i>
+          <span>Presentes</span>
+        </button>
+
+        <button 
+          (click)="navigateTo('/cart')"
+          [class.active]="isActive('/cart')"
+          class="sidebar-menu-item cart-item">
+          <i class="pi pi-shopping-cart"></i>
+          <span>Carrinho</span>
+          <ng-container *ngIf="cartCount$ | async as count">
+            <span *ngIf="count > 0" class="cart-badge-sidebar">{{ count }}</span>
+          </ng-container>
+        </button>
+
+        <button 
+          *ngIf="user.isAdmin"
+          (click)="navigateTo('/users')"
+          [class.active]="isActive('/users')"
+          class="sidebar-menu-item">
+          <i class="pi pi-users"></i>
+          <span>Usuários</span>
+        </button>
+
+        <button 
+          *ngIf="!user.isAdmin"
+          (click)="goToMyGifts()"
+          [class.active]="isActive('/my-gifts')"
+          class="sidebar-menu-item">
+          <i class="pi pi-gift"></i>
+          <span>Meus Presentes</span>
+        </button>
+      </div>
 
       <div class="sidebar-divider"></div>
 

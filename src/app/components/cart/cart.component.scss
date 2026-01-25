@@ -1,0 +1,103 @@
+.cart-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+  padding-bottom: 2rem;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  text-align: center;
+  color: #9ca3af;
+  margin-bottom: 2rem;
+}
+
+.empty-cart {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border: 2px solid #333333;
+  border-radius: 12px;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: #ffffff;
+}
+
+.cart-item {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border: 2px solid #333333;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+
+  &:hover {
+    border-color: #6366f1;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+    transform: translateY(-2px);
+  }
+}
+
+.payment-section {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border: 2px solid #333333;
+  border-radius: 12px;
+  padding: 1.5rem;
+  position: sticky;
+  top: 2rem;
+}
+
+.payment-option {
+  background: #1a1a1a;
+  border: 2px solid #333333;
+  border-radius: 10px;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #6366f1;
+    background: #252525;
+    transform: translateX(4px);
+  }
+
+  &.selected {
+    border-color: #6366f1;
+    background: rgba(99, 102, 241, 0.15);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  }
+}
+
+.payment-details {
+  animation: fadeIn 0.3s ease;
+}
+
+.summary-section {
+  border-top: 1px solid #333333;
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+::ng-deep .p-button {
+  transition: all 0.3s ease;
+}
+
+::ng-deep .p-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

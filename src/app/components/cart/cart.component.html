@@ -1,0 +1,188 @@
+<div class="cart-container">
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="page-title animate-fade-in">Carrinho de Presentes</h1>
+    <p class="page-subtitle animate-fade-in">
+      Revise seus itens selecionados e escolha a forma de pagamento
+    </p>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="text-center py-12">
+      <i class="pi pi-spin pi-spinner text-4xl text-indigo-400"></i>
+      <p class="mt-4 text-gray-400">Processando...</p>
+    </div>
+
+    <div *ngIf="!loading" class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+      <!-- Cart Items Section -->
+      <div class="lg:col-span-3">
+        <!-- Empty Cart -->
+        <div *ngIf="cartItems.length === 0" class="empty-cart animate-fade-in">
+          <i class="pi pi-shopping-cart text-6xl text-gray-600 mb-4"></i>
+          <p class="text-xl text-gray-400">Seu carrinho está vazio</p>
+          <p class="text-gray-500 mt-2">Adicione presentes à sua lista!</p>
+          <button 
+            (click)="router.navigate(['/gifts'])"
+            class="mt-4 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors flex items-center gap-2 mx-auto">
+            <i class="pi pi-gift"></i>
+            <span>Ver Presentes</span>
+          </button>
+        </div>
+
+        <!-- Cart Items List -->
+        <div *ngIf="cartItems.length > 0" class="space-y-4">
+          <div 
+            *ngFor="let item of cartItems" 
+            class="cart-item animate-fade-in">
+            <div class="flex gap-4 items-start">
+              <img 
+                [src]="item.imageUrl" 
+                [alt]="item.name"
+                class="w-24 h-24 object-cover rounded-lg flex-shrink-0"
+                onerror="this.src='https://via.placeholder.com/100?text=No+Image'" />
+              <div class="flex-grow min-w-0">
+                <h3 class="text-lg font-semibold text-white mb-2">{{ item.name }}</h3>
+                <p class="text-sm text-gray-300 mb-2">{{ item.description || 'Sem descrição disponível.' }}</p>
+                <p *ngIf="item.averagePrice" class="text-base font-semibold text-indigo-400">
+                  {{ item.averagePrice | currencyBr }}
+                </p>
+              </div>
+              <p-button 
+                icon="pi pi-trash" 
+                (onClick)="removeFromCart(item)"
+                styleClass="p-button-text p-button-danger flex-shrink-0"
+                [pTooltip]="'Remover do carrinho'">
+              </p-button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Options Section -->
+      <div class="lg:col-span-1" *ngIf="cartItems.length > 0">
+        <div class="payment-section animate-fade-in">
+          <h2 class="text-2xl font-bold text-white mb-4">Forma de Pagamento</h2>
+          
+          <!-- Payment Method Options -->
+          <div class="space-y-4 mb-6">
+            <!-- PIX Option -->
+            <div 
+              class="payment-option"
+              [class.selected]="selectedPaymentMethod === 'pix'"
+              (click)="selectPaymentMethod('pix')">
+              <div class="flex items-center gap-3">
+                <i class="pi pi-wallet text-2xl text-indigo-400"></i>
+                <div class="flex-grow">
+                  <h3 class="font-semibold text-white">PIX</h3>
+                  <p class="text-sm text-gray-400">Pagamento via chave PIX</p>
+                </div>
+                <i 
+                  class="pi"
+                  [class.pi-check-circle]="selectedPaymentMethod === 'pix'"
+                  [class.pi-circle]="selectedPaymentMethod !== 'pix'"
+                  [class.text-indigo-400]="selectedPaymentMethod === 'pix'"
+                  [class.text-gray-500]="selectedPaymentMethod !== 'pix'">
+                </i>
+              </div>
+            </div>
+
+            <!-- Buy and Send Option -->
+            <div 
+              class="payment-option"
+              [class.selected]="selectedPaymentMethod === 'buy-and-send'"
+              (click)="selectPaymentMethod('buy-and-send')">
+              <div class="flex items-center gap-3">
+                <i class="pi pi-send text-2xl text-indigo-400"></i>
+                <div class="flex-grow">
+                  <h3 class="font-semibold text-white">Comprar e Enviar</h3>
+                  <p class="text-sm text-gray-400">Enviar para nossa casa</p>
+                </div>
+                <i 
+                  class="pi"
+                  [class.pi-check-circle]="selectedPaymentMethod === 'buy-and-send'"
+                  [class.pi-circle]="selectedPaymentMethod !== 'buy-and-send'"
+                  [class.text-indigo-400]="selectedPaymentMethod === 'buy-and-send'"
+                  [class.text-gray-500]="selectedPaymentMethod !== 'buy-and-send'">
+                </i>
+              </div>
+            </div>
+
+            <!-- Buy and Deliver Option -->
+            <div 
+              class="payment-option"
+              [class.selected]="selectedPaymentMethod === 'buy-and-deliver'"
+              (click)="selectPaymentMethod('buy-and-deliver')">
+              <div class="flex items-center gap-3">
+                <i class="pi pi-calendar text-2xl text-indigo-400"></i>
+                <div class="flex-grow">
+                  <h3 class="font-semibold text-white">Comprar e Entregar</h3>
+                  <p class="text-sm text-gray-400">Entregar no dia do evento</p>
+                </div>
+                <i 
+                  class="pi"
+                  [class.pi-check-circle]="selectedPaymentMethod === 'buy-and-deliver'"
+                  [class.pi-circle]="selectedPaymentMethod !== 'buy-and-deliver'"
+                  [class.text-indigo-400]="selectedPaymentMethod === 'buy-and-deliver'"
+                  [class.text-gray-500]="selectedPaymentMethod !== 'buy-and-deliver'">
+                </i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Details -->
+          <div *ngIf="selectedPaymentMethod" class="payment-details mb-6">
+            <div class="bg-gray-800 rounded-lg p-5 border-2 border-gray-700">
+              <h3 class="font-semibold text-white mb-3 text-lg">
+                {{ getPaymentMethodLabel(selectedPaymentMethod) }}
+              </h3>
+              <p class="text-sm text-gray-300 mb-4 leading-relaxed">
+                {{ getPaymentMethodDescription(selectedPaymentMethod) }}
+              </p>
+              
+              <!-- PIX Key Display -->
+              <div *ngIf="selectedPaymentMethod === 'pix'" class="mt-4">
+                <label class="block text-sm font-medium text-white mb-2">Chave PIX:</label>
+                <div class="flex gap-3">
+                  <input 
+                    type="text" 
+                    [value]="pixKey" 
+                    readonly
+                    class="flex-grow bg-gray-900 border-2 border-gray-700 rounded-lg px-4 py-2.5 text-white text-sm"
+                    id="pix-key-input" />
+                  <p-button 
+                    icon="pi pi-copy" 
+                    (onClick)="copyPixKey()"
+                    styleClass="p-button-outlined"
+                    [pTooltip]="'Copiar chave PIX'">
+                  </p-button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Summary -->
+          <div class="summary-section">
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-gray-300">Total de itens:</span>
+              <span class="text-white font-semibold">{{ cartItems.length }}</span>
+            </div>
+            <div class="flex justify-between items-center mb-4 pt-3 border-t border-gray-700">
+              <span class="text-lg font-semibold text-white">Valor Total:</span>
+              <span class="text-xl font-bold text-indigo-400">
+                {{ getTotalPrice() | currencyBr }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Confirm Button -->
+          <p-button 
+            label="Confirmar Compra" 
+            icon="pi pi-check" 
+            (onClick)="confirmPurchase()"
+            [disabled]="!selectedPaymentMethod"
+            styleClass="w-full p-button-primary p-button-lg"
+            [loading]="loading">
+          </p-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
