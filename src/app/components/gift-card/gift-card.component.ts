@@ -24,7 +24,7 @@ export class GiftCardComponent {
     private messageService: MessageService
   ) { }
 
-  onPurchase(): void {
+  async onPurchase(): Promise<void> {
     // Se o presente já está comprado, não fazer nada
     if (this.gift.isPurchased) {
       return;
@@ -40,8 +40,8 @@ export class GiftCardComponent {
       return;
     }
 
-    // Adicionar ao carrinho
-    this.cartService.addToCart(this.gift);
+    // Adicionar ao carrinho (já mostra mensagem se outros usuários têm o item)
+    await this.cartService.addToCart(this.gift);
     this.messageService.add({
       severity: 'success',
       summary: 'Adicionado ao carrinho',
@@ -67,9 +67,24 @@ export class GiftCardComponent {
 
   canUnpurchase(): boolean {
     if (!this.currentUser) return false;
-    // User can unpurchase if they purchased it, or if they're admin
-    return this.userService.isAdmin() || 
-           (this.gift.isPurchased && this.gift.purchasedByUserId === this.currentUser.id);
+    // Só pode remover marcação se estiver no carrinho
+    // Admin pode remover se comprou ou se está no carrinho
+    const isInCart = this.cartService.isInCart(this.gift.id);
+    if (this.userService.isAdmin()) {
+      return (this.gift.isPurchased && this.gift.purchasedByUserId === this.currentUser.id) || isInCart;
+    }
+    // Usuário comum só pode remover se estiver no carrinho
+    return isInCart && this.gift.isPurchased && this.gift.purchasedByUserId === this.currentUser.id;
+  }
+
+  isUnavailable(): boolean {
+    // Item indisponível se foi comprado por outra pessoa
+    if (!this.currentUser || !this.gift.isPurchased) {
+      return false;
+    }
+    return this.gift.purchasedByUserId !== undefined && 
+           this.gift.purchasedByUserId !== null &&
+           this.gift.purchasedByUserId !== this.currentUser.id;
   }
 
   onImageError(event: Event): void {

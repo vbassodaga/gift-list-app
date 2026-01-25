@@ -4,6 +4,7 @@ export interface Gift {
   description: string;
   imageUrl: string;
   averagePrice?: number; // Valor médio em centavos
+  linkUrl?: string; // Link para acessar o produto em outro site
   isPurchased: boolean;
   purchasedByUserId?: number;
   purchasedBy?: string; // Full name of purchaser
@@ -15,6 +16,7 @@ export interface CreateGift {
   description: string;
   imageUrl: string;
   averagePrice?: number; // Valor médio em centavos
+  linkUrl?: string; // Link para acessar o produto em outro site
 }
 
 export interface MarkPurchased {

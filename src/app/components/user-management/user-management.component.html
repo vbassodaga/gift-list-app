@@ -49,8 +49,8 @@
                   [icon]="user.isAdmin ? 'pi pi-user-minus' : 'pi pi-user-plus'"
                   [styleClass]="user.isAdmin ? 'p-button-warning p-button-outlined' : 'p-button-primary'"
                   (onClick)="toggleAdminRole(user)"
-                  [disabled]="loading"
-                  [loading]="loading">
+                  [disabled]="isUserActionLoading(user.id) || loading"
+                  [loading]="isUserActionLoading(user.id)">
                 </p-button>
               </td>
             </tr>

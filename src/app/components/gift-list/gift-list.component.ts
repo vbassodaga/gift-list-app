@@ -19,11 +19,13 @@ export class GiftListComponent implements OnInit {
     name: '',
     description: '',
     imageUrl: '',
-    averagePrice: undefined as number | undefined
+    averagePrice: undefined as number | undefined,
+    linkUrl: undefined as string | undefined
   };
   purchaseDialogVisible = false;
   selectedGift: Gift | null = null;
   currentUser: User | null = null;
+  actionLoading: { [key: string]: boolean } = {}; // Para controlar loading de ações específicas
 
   constructor(
     private giftService: GiftService,
@@ -40,12 +42,20 @@ export class GiftListComponent implements OnInit {
     this.loadGifts();
   }
 
-  loadGifts(): void {
+  loadGifts(forceRefresh: boolean = false): void {
+    // Evitar recarregar se já está carregando
+    if (this.loading && !forceRefresh) return;
+
     this.loading = true;
-    this.giftService.getGifts().subscribe({
+    this.giftService.getGifts(!forceRefresh).subscribe({
       next: (gifts) => {
         this.gifts = gifts;
         this.loading = false;
+        // Recarregar carrinho do backend após carregar presentes
+        if (this.currentUser) {
+          // O CartService já sincroniza automaticamente, mas forçamos uma atualização
+          // quando os presentes são recarregados
+        }
       },
       error: (error) => {
         console.error('Error loading gifts:', error);
@@ -103,6 +113,10 @@ export class GiftListComponent implements OnInit {
       return;
     }
 
+    const actionKey = `purchase-${this.selectedGift.id}`;
+    if (this.actionLoading[actionKey]) return; // Prevenir múltiplos cliques
+
+    this.actionLoading[actionKey] = true;
     this.giftService.markAsPurchased(this.selectedGift.id, this.currentUser.id).subscribe({
       next: () => {
         this.messageService.add({
@@ -111,7 +125,8 @@ export class GiftListComponent implements OnInit {
           detail: 'Presente marcado como comprado!'
         });
         this.purchaseDialogVisible = false;
-        this.loadGifts();
+        this.loadGifts(true); // Force refresh após compra
+        this.actionLoading[actionKey] = false;
       },
       error: (error) => {
         console.error('Error marking gift as purchased:', error);
@@ -121,6 +136,7 @@ export class GiftListComponent implements OnInit {
           summary: 'Erro',
           detail: errorMessage
         });
+        this.actionLoading[actionKey] = false;
       }
     });
   }
@@ -154,12 +170,15 @@ export class GiftListComponent implements OnInit {
       return;
     }
 
+    if (this.actionLoading['addGift']) return; // Prevenir múltiplos cliques
+
     // Converter preço de reais para centavos se fornecido
     const giftToCreate = {
       ...this.newGift,
       averagePrice: this.newGift.averagePrice ? Math.round(this.newGift.averagePrice * 100) : undefined
     };
 
+    this.actionLoading['addGift'] = true;
     this.giftService.createGift(giftToCreate, this.currentUser.id).subscribe({
       next: () => {
         this.messageService.add({
@@ -168,8 +187,9 @@ export class GiftListComponent implements OnInit {
           detail: 'Presente adicionado com sucesso!'
         });
         this.showAddDialog = false;
-        this.newGift = { name: '', description: '', imageUrl: '', averagePrice: undefined };
-        this.loadGifts();
+        this.newGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined };
+        this.loadGifts(true); // Force refresh após adicionar
+        this.actionLoading['addGift'] = false;
       },
       error: (error) => {
         console.error('Error adding gift:', error);
@@ -179,13 +199,14 @@ export class GiftListComponent implements OnInit {
           summary: 'Erro',
           detail: errorMessage
         });
+        this.actionLoading['addGift'] = false;
       }
     });
   }
 
   cancelAdd(): void {
     this.showAddDialog = false;
-    this.newGift = { name: '', description: '', imageUrl: '', averagePrice: undefined };
+    this.newGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined };
   }
 
   showEditDialog = false;
@@ -194,7 +215,8 @@ export class GiftListComponent implements OnInit {
     name: '',
     description: '',
     imageUrl: '',
-    averagePrice: undefined as number | undefined
+    averagePrice: undefined as number | undefined,
+    linkUrl: undefined as string | undefined
   };
 
   openEditDialog(gift: Gift): void {
@@ -212,7 +234,8 @@ export class GiftListComponent implements OnInit {
       name: gift.name,
       description: gift.description,
       imageUrl: gift.imageUrl,
-      averagePrice: gift.averagePrice ? gift.averagePrice / 100 : undefined
+      averagePrice: gift.averagePrice ? gift.averagePrice / 100 : undefined,
+      linkUrl: gift.linkUrl || undefined
     };
     this.showEditDialog = true;
   }
@@ -222,12 +245,18 @@ export class GiftListComponent implements OnInit {
       return;
     }
 
+    if (!this.editingGift) return;
+    
+    const actionKey = `edit-${this.editingGift.id}`;
+    if (this.actionLoading[actionKey]) return; // Prevenir múltiplos cliques
+
     // Converter preço de reais para centavos se fornecido
     const giftToUpdate = {
       ...this.editGift,
       averagePrice: this.editGift.averagePrice ? Math.round(this.editGift.averagePrice * 100) : undefined
     };
 
+    this.actionLoading[actionKey] = true;
     this.giftService.updateGift(this.editingGift.id, giftToUpdate, this.currentUser.id).subscribe({
       next: () => {
         this.messageService.add({
@@ -237,8 +266,9 @@ export class GiftListComponent implements OnInit {
         });
         this.showEditDialog = false;
         this.editingGift = null;
-        this.editGift = { name: '', description: '', imageUrl: '', averagePrice: undefined };
-        this.loadGifts();
+        this.editGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined };
+        this.loadGifts(true); // Force refresh após editar
+        this.actionLoading[actionKey] = false;
       },
       error: (error) => {
         console.error('Error updating gift:', error);
@@ -248,6 +278,7 @@ export class GiftListComponent implements OnInit {
           summary: 'Erro',
           detail: errorMessage
         });
+        this.actionLoading[actionKey] = false;
       }
     });
   }
@@ -255,7 +286,7 @@ export class GiftListComponent implements OnInit {
   cancelEdit(): void {
     this.showEditDialog = false;
     this.editingGift = null;
-    this.editGift = { name: '', description: '', imageUrl: '', averagePrice: undefined };
+    this.editGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined };
   }
 
   confirmDelete(gift: Gift): void {
@@ -283,6 +314,10 @@ export class GiftListComponent implements OnInit {
   deleteGift(id: number): void {
     if (!this.currentUser) return;
 
+    const actionKey = `delete-${id}`;
+    if (this.actionLoading[actionKey]) return; // Prevenir múltiplos cliques
+
+    this.actionLoading[actionKey] = true;
     this.giftService.deleteGift(id, this.currentUser.id).subscribe({
       next: () => {
         this.messageService.add({
@@ -290,7 +325,8 @@ export class GiftListComponent implements OnInit {
           summary: 'Sucesso',
           detail: 'Presente deletado com sucesso!'
         });
-        this.loadGifts();
+        this.loadGifts(true); // Force refresh após deletar
+        this.actionLoading[actionKey] = false;
       },
       error: (error) => {
         console.error('Error deleting gift:', error);
@@ -300,6 +336,7 @@ export class GiftListComponent implements OnInit {
           summary: 'Erro',
           detail: errorMessage
         });
+        this.actionLoading[actionKey] = false;
       }
     });
   }
@@ -337,6 +374,10 @@ export class GiftListComponent implements OnInit {
   unpurchaseGift(id: number): void {
     if (!this.currentUser) return;
 
+    const actionKey = `unpurchase-${id}`;
+    if (this.actionLoading[actionKey]) return; // Prevenir múltiplos cliques
+
+    this.actionLoading[actionKey] = true;
     this.giftService.markAsUnpurchased(id, this.currentUser.id).subscribe({
       next: () => {
         this.messageService.add({
@@ -344,7 +385,8 @@ export class GiftListComponent implements OnInit {
           summary: 'Sucesso',
           detail: 'Marcação removida com sucesso!'
         });
-        this.loadGifts();
+        this.loadGifts(true); // Force refresh após remover marcação
+        this.actionLoading[actionKey] = false;
       },
       error: (error) => {
         console.error('Error unpurchasing gift:', error);
@@ -354,8 +396,13 @@ export class GiftListComponent implements OnInit {
           summary: 'Erro',
           detail: errorMessage
         });
+        this.actionLoading[actionKey] = false;
       }
     });
+  }
+
+  isActionLoading(actionKey: string): boolean {
+    return this.actionLoading[actionKey] === true;
   }
 }
 

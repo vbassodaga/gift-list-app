@@ -13,6 +13,7 @@ export class UserManagementComponent implements OnInit {
   users: User[] = [];
   loading = false;
   currentUser: User | null = null;
+  actionLoading: { [key: number]: boolean } = {}; // Para controlar loading por usuário
 
   constructor(
     private userService: UserService,
@@ -84,7 +85,9 @@ export class UserManagementComponent implements OnInit {
   updateUserRole(user: User, role: number): void {
     if (!this.currentUser) return;
 
-    this.loading = true;
+    if (this.actionLoading[user.id]) return; // Prevenir múltiplos cliques
+
+    this.actionLoading[user.id] = true;
     this.userService.updateUserRole(this.currentUser.id, user.id, role).subscribe({
       next: (updatedUser) => {
         const index = this.users.findIndex(u => u.id === user.id);
@@ -96,7 +99,7 @@ export class UserManagementComponent implements OnInit {
           summary: 'Sucesso',
           detail: `Cargo de ${updatedUser.isAdmin ? 'administrador' : 'usuário'} ${updatedUser.isAdmin ? 'concedido' : 'removido'} com sucesso!`
         });
-        this.loading = false;
+        this.actionLoading[user.id] = false;
       },
       error: (error) => {
         console.error('Error updating user role:', error);
@@ -106,9 +109,13 @@ export class UserManagementComponent implements OnInit {
           summary: 'Erro',
           detail: errorMessage
         });
-        this.loading = false;
+        this.actionLoading[user.id] = false;
       }
     });
+  }
+
+  isUserActionLoading(userId: number): boolean {
+    return this.actionLoading[userId] === true;
   }
 
   formatDate(dateString: string): string {

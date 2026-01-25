@@ -31,7 +31,7 @@
         <div *ngIf="cartItems.length > 0" class="space-y-4">
           <div 
             *ngFor="let item of cartItems" 
-            class="cart-item animate-fade-in">
+            [class]="'cart-item animate-fade-in ' + (isUnavailable(item.id) ? 'opacity-50' : '')">
             <div class="flex gap-4 items-start">
               <img 
                 [src]="item.imageUrl" 
@@ -39,7 +39,18 @@
                 class="w-24 h-24 object-cover rounded-lg flex-shrink-0"
                 onerror="this.src='https://via.placeholder.com/100?text=No+Image'" />
               <div class="flex-grow min-w-0">
-                <h3 class="text-lg font-semibold text-white mb-2">{{ item.name }}</h3>
+                <div class="flex items-center gap-2 mb-2">
+                  <h3 class="text-lg font-semibold text-white">{{ item.name }}</h3>
+                  <p-tag 
+                    *ngIf="isUnavailable(item.id)" 
+                    value="Indisponível" 
+                    severity="danger"
+                    styleClass="text-xs">
+                  </p-tag>
+                </div>
+                <p *ngIf="isUnavailable(item.id)" class="text-sm text-red-400 mb-2">
+                  Este item foi comprado por outra pessoa. Remova-o do carrinho para continuar.
+                </p>
                 <p class="text-sm text-gray-300 mb-2">{{ item.description || 'Sem descrição disponível.' }}</p>
                 <p *ngIf="item.averagePrice" class="text-base font-semibold text-indigo-400">
                   {{ item.averagePrice | currencyBr }}

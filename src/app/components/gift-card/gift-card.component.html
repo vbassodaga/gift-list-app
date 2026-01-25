@@ -1,6 +1,6 @@
 <p-card 
   [style]="{'height': '100%', 'display': 'flex', 'flex-direction': 'column'}"
-  styleClass="h-full flex flex-col shadow-lg hover:shadow-xl transition-shadow duration-300">
+  [styleClass]="'h-full flex flex-col shadow-lg hover:shadow-xl transition-shadow duration-300 ' + (isUnavailable() ? 'opacity-50 pointer-events-none' : '')">
   <ng-template pTemplate="header">
     <div class="relative">
       <img 
@@ -15,6 +15,12 @@
         severity="success"
         styleClass="absolute top-2 right-2">
       </p-tag>
+      <p-tag 
+        *ngIf="isUnavailable()" 
+        value="Indisponível" 
+        severity="danger"
+        styleClass="absolute top-2 left-2">
+      </p-tag>
     </div>
   </ng-template>
   
@@ -28,12 +34,16 @@
         {{ gift.averagePrice | currencyBr }}
       </p>
     </div>
-    
-    <div *ngIf="gift.isPurchased && gift.purchasedBy && currentUser && !userService.isAdmin()" class="mb-3">
-      <p class="text-sm text-gray-300">
-        <i class="pi pi-user mr-1"></i>
-        Comprado por: <span class="font-semibold text-indigo-400">{{ gift.purchasedBy }}</span>
-      </p>
+
+    <div *ngIf="gift.linkUrl" class="mb-3">
+      <a 
+        [href]="gift.linkUrl" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors text-sm font-medium">
+        <i class="pi pi-external-link"></i>
+        <span>Acessar o Link</span>
+      </a>
     </div>
   </div>
 
@@ -56,34 +66,47 @@
 
     <!-- Simple User Actions -->
     <div *ngIf="currentUser && !userService.isAdmin()">
-      <p-button 
-        *ngIf="!gift.isPurchased && !isInCart()"
-        label="Adicionar ao Carrinho" 
-        icon="pi pi-shopping-cart" 
-        (onClick)="onPurchase()"
-        styleClass="w-full p-button-primary">
-      </p-button>
-      <p-button 
-        *ngIf="!gift.isPurchased && isInCart()"
-        label="No Carrinho" 
-        icon="pi pi-check" 
-        styleClass="w-full p-button-success"
-        [disabled]="true">
-      </p-button>
-      <div *ngIf="gift.isPurchased" class="space-y-3">
+      <div *ngIf="isUnavailable()" class="space-y-3">
         <p-button 
-          label="Já Comprado" 
-          icon="pi pi-check-circle" 
+          label="Indisponível" 
+          icon="pi pi-ban" 
+          styleClass="w-full p-button-danger"
+          [disabled]="true">
+        </p-button>
+        <p class="text-xs text-gray-400 text-center">
+          Este item foi comprado por outra pessoa.
+        </p>
+      </div>
+      <div *ngIf="!isUnavailable()">
+        <p-button 
+          *ngIf="!gift.isPurchased && !isInCart()"
+          label="Adicionar ao Carrinho" 
+          icon="pi pi-shopping-cart" 
+          (onClick)="onPurchase()"
+          styleClass="w-full p-button-primary">
+        </p-button>
+        <p-button 
+          *ngIf="!gift.isPurchased && isInCart()"
+          label="No Carrinho" 
+          icon="pi pi-check" 
           styleClass="w-full p-button-success"
           [disabled]="true">
         </p-button>
-        <p-button 
-          *ngIf="canUnpurchase()"
-          label="Remover Marcação" 
-          icon="pi pi-times" 
-          (onClick)="onUnpurchase()"
-          styleClass="w-full p-button-outlined">
-        </p-button>
+        <div *ngIf="gift.isPurchased" class="space-y-3">
+          <p-button 
+            label="Já Comprado" 
+            icon="pi pi-check-circle" 
+            styleClass="w-full p-button-success"
+            [disabled]="true">
+          </p-button>
+          <p-button 
+            *ngIf="canUnpurchase()"
+            label="Remover Marcação" 
+            icon="pi pi-times" 
+            (onClick)="onUnpurchase()"
+            styleClass="w-full p-button-outlined">
+          </p-button>
+        </div>
       </div>
     </div>
   </ng-template>

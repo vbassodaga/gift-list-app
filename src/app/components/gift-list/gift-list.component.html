@@ -92,6 +92,16 @@
           placeholder="https://exemplo.com/imagem.jpg"
           class="w-full" />
       </div>
+      <div>
+        <label class="block text-sm font-medium text-white mb-2">Link do Produto</label>
+        <input 
+          type="url" 
+          pInputText 
+          [(ngModel)]="newGift.linkUrl" 
+          placeholder="https://exemplo.com/produto"
+          class="w-full" />
+        <p class="text-xs text-gray-400 mt-1">Link para acessar o produto em outro site (opcional)</p>
+      </div>
     </div>
     <ng-template pTemplate="footer">
       <div class="flex gap-3 justify-end">
@@ -105,6 +115,8 @@
           label="Adicionar" 
           icon="pi pi-check" 
           (onClick)="addGift()"
+          [loading]="isActionLoading('addGift')"
+          [disabled]="isActionLoading('addGift')"
           styleClass="p-button-primary">
         </p-button>
       </div>
@@ -137,12 +149,14 @@
           (onClick)="cancelPurchase()"
           styleClass="p-button-text">
         </p-button>
-        <p-button 
-          label="Confirmar Compra" 
-          icon="pi pi-check" 
-          (onClick)="confirmPurchase()"
-          styleClass="p-button-success">
-        </p-button>
+      <p-button 
+        label="Confirmar Compra" 
+        icon="pi pi-check" 
+        (onClick)="confirmPurchase()"
+        [loading]="selectedGift && isActionLoading('purchase-' + selectedGift.id)"
+        [disabled]="selectedGift && isActionLoading('purchase-' + selectedGift.id)"
+        styleClass="p-button-success">
+      </p-button>
       </div>
     </ng-template>
   </p-dialog>
@@ -198,6 +212,16 @@
           placeholder="https://exemplo.com/imagem.jpg"
           class="w-full" />
       </div>
+      <div>
+        <label class="block text-sm font-medium text-white mb-2">Link do Produto</label>
+        <input 
+          type="url" 
+          pInputText 
+          [(ngModel)]="editGift.linkUrl" 
+          placeholder="https://exemplo.com/produto"
+          class="w-full" />
+        <p class="text-xs text-gray-400 mt-1">Link para acessar o produto em outro site (opcional)</p>
+      </div>
     </div>
     <ng-template pTemplate="footer">
       <div class="flex gap-3 justify-end">
@@ -207,12 +231,14 @@
           (onClick)="cancelEdit()"
           styleClass="p-button-text">
         </p-button>
-        <p-button 
-          label="Salvar" 
-          icon="pi pi-check" 
-          (onClick)="saveEdit()"
-          styleClass="p-button-primary">
-        </p-button>
+      <p-button 
+        label="Salvar" 
+        icon="pi pi-check" 
+        (onClick)="saveEdit()"
+        [loading]="editingGift && isActionLoading('edit-' + editingGift.id)"
+        [disabled]="editingGift && isActionLoading('edit-' + editingGift.id)"
+        styleClass="p-button-primary">
+      </p-button>
       </div>
     </ng-template>
   </p-dialog>

@@ -19,6 +19,7 @@ export class CartComponent implements OnInit {
   loading = false;
   selectedPaymentMethod: string | null = null;
   pixKey: string = 'sua-chave-pix@exemplo.com'; // Você pode configurar isso depois
+  unavailableItems: Set<number> = new Set();
 
   constructor(
     private cartService: CartService,
@@ -37,9 +38,20 @@ export class CartComponent implements OnInit {
       }
     });
 
-    this.cartService.cartItems$.subscribe(items => {
+    this.cartService.cartItems$.subscribe(async items => {
       this.cartItems = items;
+      // Verificar itens indisponíveis sempre que o carrinho mudar
+      if (items.length > 0 && this.currentUser) {
+        const unavailable = await this.cartService.checkUnavailableItems();
+        this.unavailableItems = new Set(unavailable);
+      } else {
+        this.unavailableItems = new Set();
+      }
     });
+  }
+
+  isUnavailable(giftId: number): boolean {
+    return this.unavailableItems.has(giftId);
   }
 
   removeFromCart(gift: Gift): void {
@@ -71,7 +83,7 @@ export class CartComponent implements OnInit {
     });
   }
 
-  confirmPurchase(): void {
+  async confirmPurchase(): Promise<void> {
     if (!this.currentUser || !this.selectedPaymentMethod) {
       this.messageService.add({
         severity: 'warn',
@@ -86,6 +98,24 @@ export class CartComponent implements OnInit {
         severity: 'warn',
         summary: 'Carrinho vazio',
         detail: 'Adicione itens ao carrinho antes de finalizar.'
+      });
+      return;
+    }
+
+    // Prevenir múltiplos cliques
+    if (this.loading) return;
+
+    // Verificar se há itens indisponíveis (comprados por outros)
+    const unavailableItems = await this.cartService.checkUnavailableItems();
+    if (unavailableItems.length > 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Itens indisponíveis',
+        detail: `Alguns itens foram comprados por outras pessoas. Remova-os do carrinho antes de finalizar.`
+      });
+      // Recarregar itens para atualizar status
+      this.cartService.cartItems$.subscribe(items => {
+        this.cartItems = items;
       });
       return;
     }

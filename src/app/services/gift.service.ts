@@ -1,18 +1,30 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { Gift, CreateGift, MarkPurchased } from '../models/gift.model';
 import { environment } from '../../environments/environment';
+import { CacheService } from './cache.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GiftService {
   private apiUrl = `${environment.apiUrl}/gifts`;
+  private readonly CACHE_KEY_GIFTS = 'gifts_list';
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private cacheService: CacheService
+  ) { }
 
-  getGifts(): Observable<Gift[]> {
+  getGifts(useCache: boolean = true): Observable<Gift[]> {
+    if (useCache) {
+      return this.cacheService.cacheObservable(
+        this.CACHE_KEY_GIFTS,
+        this.http.get<Gift[]>(this.apiUrl)
+      );
+    }
     return this.http.get<Gift[]>(this.apiUrl);
   }
 
@@ -22,26 +34,36 @@ export class GiftService {
 
   createGift(gift: CreateGift, userId: number): Observable<Gift> {
     const params = new HttpParams().set('userId', userId.toString());
-    return this.http.post<Gift>(this.apiUrl, gift, { params });
+    return this.http.post<Gift>(this.apiUrl, gift, { params }).pipe(
+      tap(() => this.cacheService.clear(this.CACHE_KEY_GIFTS))
+    );
   }
 
-  updateGift(id: number, gift: { name?: string; description?: string; imageUrl?: string; averagePrice?: number }, userId: number): Observable<void> {
+  updateGift(id: number, gift: { name?: string; description?: string; imageUrl?: string; averagePrice?: number; linkUrl?: string }, userId: number): Observable<void> {
     const params = new HttpParams().set('userId', userId.toString());
-    return this.http.put<void>(`${this.apiUrl}/${id}`, gift, { params });
+    return this.http.put<void>(`${this.apiUrl}/${id}`, gift, { params }).pipe(
+      tap(() => this.cacheService.clear(this.CACHE_KEY_GIFTS))
+    );
   }
 
   markAsPurchased(id: number, userId: number): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/${id}/purchase`, { userId });
+    return this.http.post<void>(`${this.apiUrl}/${id}/purchase`, { userId }).pipe(
+      tap(() => this.cacheService.clear(this.CACHE_KEY_GIFTS))
+    );
   }
 
   markAsUnpurchased(id: number, userId: number): Observable<void> {
     const params = new HttpParams().set('userId', userId.toString());
-    return this.http.post<void>(`${this.apiUrl}/${id}/unpurchase`, {}, { params });
+    return this.http.post<void>(`${this.apiUrl}/${id}/unpurchase`, {}, { params }).pipe(
+      tap(() => this.cacheService.clear(this.CACHE_KEY_GIFTS))
+    );
   }
 
   deleteGift(id: number, userId: number): Observable<void> {
     const params = new HttpParams().set('userId', userId.toString());
-    return this.http.delete<void>(`${this.apiUrl}/${id}`, { params });
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { params }).pipe(
+      tap(() => this.cacheService.clear(this.CACHE_KEY_GIFTS))
+    );
   }
 }
 

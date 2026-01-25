@@ -43,6 +43,9 @@ export class MyGiftsComponent implements OnInit {
   loadGifts(): void {
     if (!this.currentUser) return;
 
+    // Evitar recarregar se já está carregando
+    if (this.loading) return;
+
     this.loading = true;
     this.giftService.getGifts().subscribe({
       next: (gifts) => {
