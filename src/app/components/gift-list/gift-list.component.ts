@@ -20,7 +20,8 @@ export class GiftListComponent implements OnInit {
     description: '',
     imageUrl: '',
     averagePrice: undefined as number | undefined,
-    linkUrl: undefined as string | undefined
+    linkUrl: undefined as string | undefined,
+    deliveryAddress: undefined as string | undefined
   };
   purchaseDialogVisible = false;
   selectedGift: Gift | null = null;
@@ -187,7 +188,7 @@ export class GiftListComponent implements OnInit {
           detail: 'Presente adicionado com sucesso!'
         });
         this.showAddDialog = false;
-        this.newGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined };
+        this.newGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined, deliveryAddress: undefined };
         this.loadGifts(true); // Force refresh após adicionar
         this.actionLoading['addGift'] = false;
       },
@@ -216,7 +217,8 @@ export class GiftListComponent implements OnInit {
     description: '',
     imageUrl: '',
     averagePrice: undefined as number | undefined,
-    linkUrl: undefined as string | undefined
+    linkUrl: undefined as string | undefined,
+    deliveryAddress: undefined as string | undefined
   };
 
   openEditDialog(gift: Gift): void {
@@ -235,7 +237,8 @@ export class GiftListComponent implements OnInit {
       description: gift.description,
       imageUrl: gift.imageUrl,
       averagePrice: gift.averagePrice ? gift.averagePrice / 100 : undefined,
-      linkUrl: gift.linkUrl || undefined
+      linkUrl: gift.linkUrl || undefined,
+      deliveryAddress: gift.deliveryAddress || undefined
     };
     this.showEditDialog = true;
   }
@@ -266,7 +269,7 @@ export class GiftListComponent implements OnInit {
         });
         this.showEditDialog = false;
         this.editingGift = null;
-        this.editGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined };
+        this.editGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined, deliveryAddress: undefined };
         this.loadGifts(true); // Force refresh após editar
         this.actionLoading[actionKey] = false;
       },

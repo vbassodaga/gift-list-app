@@ -19,7 +19,6 @@ export class CartComponent implements OnInit {
   currentUser: User | null = null;
   loading = false;
   selectedPaymentMethod: string | null = null;
-  deliveryAddress: string = '';
   pixKey: string = 'sua-chave-pix@exemplo.com'; // Você pode configurar isso depois
   unavailableItems: Set<number> = new Set();
   othersCartCount: { [giftId: number]: number } = {}; // Mapa de giftId -> quantidade de outros usuários
@@ -127,14 +126,17 @@ export class CartComponent implements OnInit {
       return;
     }
 
-    // Validar endereço se necessário
-    if (this.selectedPaymentMethod === 'buy-and-send' && !this.deliveryAddress.trim()) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Atenção',
-        detail: 'Por favor, informe o endereço de entrega.'
-      });
-      return;
+    // Validar endereço se necessário (deve estar definido no presente)
+    if (this.selectedPaymentMethod === 'buy-and-send') {
+      const itemsWithoutAddress = this.cartItems.filter(item => !item.deliveryAddress || !item.deliveryAddress.trim());
+      if (itemsWithoutAddress.length > 0) {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Atenção',
+          detail: 'Alguns itens não possuem endereço de entrega definido. Entre em contato com o administrador.'
+        });
+        return;
+      }
     }
 
     if (this.cartItems.length === 0) {
@@ -172,18 +174,27 @@ export class CartComponent implements OnInit {
         gift.id, 
         this.currentUser!.id,
         this.selectedPaymentMethod || undefined,
-        this.selectedPaymentMethod === 'buy-and-send' ? this.deliveryAddress : undefined
+        this.selectedPaymentMethod === 'buy-and-send' ? gift.deliveryAddress : undefined
       )
     );
 
     forkJoin(purchaseObservables).subscribe({
-      next: () => {
+      next: async () => {
+        // Remover todos os itens do carrinho (frontend e backend)
+        const itemsToRemove = [...this.cartItems];
+        for (const gift of itemsToRemove) {
+          try {
+            await this.cartService.removeFromCart(gift.id);
+          } catch (error) {
+            console.error(`Erro ao remover ${gift.name} do carrinho:`, error);
+          }
+        }
+        
         this.messageService.add({
           severity: 'success',
           summary: 'Compra confirmada!',
           detail: `Seus ${this.cartItems.length} presente(s) foram marcados como comprados.`
         });
-        this.cartService.clearCart();
         this.selectedPaymentMethod = null;
         this.router.navigate(['/my-gifts']);
         this.loading = false;

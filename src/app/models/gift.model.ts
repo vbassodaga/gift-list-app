@@ -19,6 +19,7 @@ export interface CreateGift {
   imageUrl: string;
   averagePrice?: number; // Valor médio em centavos
   linkUrl?: string; // Link para acessar o produto em outro site
+  deliveryAddress?: string; // Endereço fixo de entrega (definido pelo admin)
 }
 
 export interface MarkPurchased {

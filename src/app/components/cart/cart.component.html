@@ -128,23 +128,20 @@
               </div>
             </div>
 
-            <!-- Delivery Address Input (only shown when buy-and-send is selected) -->
+            <!-- Delivery Address Display (only shown when buy-and-send is selected) -->
             <div *ngIf="selectedPaymentMethod === 'buy-and-send'" class="mt-4">
               <label class="block text-sm font-medium text-white mb-2">
                 <i class="pi pi-map-marker mr-2"></i>
                 Endereço de Entrega
               </label>
-              <textarea
-                pInputTextarea
-                [(ngModel)]="deliveryAddress"
-                placeholder="Digite o endereço completo para entrega..."
-                rows="3"
-                class="w-full"
-                styleClass="w-full">
-              </textarea>
-              <p class="text-xs text-gray-400 mt-1">
-                Informe o endereço completo onde o presente deve ser entregue.
-              </p>
+              <div *ngFor="let item of cartItems" class="mb-3 p-3 bg-gray-800 rounded-lg border border-gray-700">
+                <p class="text-xs text-gray-400 mb-1">{{ item.name }}:</p>
+                <p *ngIf="item.deliveryAddress" class="text-sm text-white">{{ item.deliveryAddress }}</p>
+                <p *ngIf="!item.deliveryAddress" class="text-sm text-yellow-400">
+                  <i class="pi pi-exclamation-triangle mr-1"></i>
+                  Endereço não definido para este item
+                </p>
+              </div>
             </div>
 
             <!-- Buy and Deliver Option -->

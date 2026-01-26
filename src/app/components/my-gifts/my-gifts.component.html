@@ -48,7 +48,7 @@
                 <p class="text-sm text-white font-medium">{{ getPaymentMethodLabel(gift.paymentMethod) }}</p>
               </div>
             </div>
-            <div *ngIf="gift.deliveryAddress" class="flex items-start gap-2 mt-3">
+            <div *ngIf="gift.paymentMethod === 'buy-and-send' && gift.deliveryAddress" class="flex items-start gap-2 mt-3">
               <i class="pi pi-map-marker text-indigo-400 mt-1"></i>
               <div class="flex-grow">
                 <p class="text-xs text-gray-400 mb-1">Endereço de Entrega:</p>

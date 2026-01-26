@@ -103,6 +103,17 @@
           class="w-full" />
         <p class="text-xs text-gray-400 mt-1">Link para acessar o produto em outro site (opcional)</p>
       </div>
+      <div>
+        <label class="block text-sm font-medium text-white mb-2">Endereço de Entrega</label>
+        <textarea 
+          pInputTextarea 
+          [(ngModel)]="newGift.deliveryAddress" 
+          placeholder="Digite o endereço completo para entrega (opcional)"
+          rows="3"
+          class="w-full">
+        </textarea>
+        <p class="text-xs text-gray-400 mt-1">Endereço fixo que será usado quando alguém escolher "Comprar e Enviar" (opcional)</p>
+      </div>
     </div>
     <ng-template pTemplate="footer">
       <div class="flex gap-3 justify-end">
@@ -222,6 +233,17 @@
           placeholder="https://exemplo.com/produto"
           class="w-full" />
         <p class="text-xs text-gray-400 mt-1">Link para acessar o produto em outro site (opcional)</p>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-white mb-2">Endereço de Entrega</label>
+        <textarea 
+          pInputTextarea 
+          [(ngModel)]="editGift.deliveryAddress" 
+          placeholder="Digite o endereço completo para entrega (opcional)"
+          rows="3"
+          class="w-full">
+        </textarea>
+        <p class="text-xs text-gray-400 mt-1">Endereço fixo que será usado quando alguém escolher "Comprar e Enviar" (opcional)</p>
       </div>
     </div>
     <ng-template pTemplate="footer">
