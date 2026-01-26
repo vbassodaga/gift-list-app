@@ -3,10 +3,11 @@ import { Router } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { GiftService } from '../../services/gift.service';
 import { UserService } from '../../services/user.service';
+import { CartApiService } from '../../services/cart-api.service';
 import { Gift } from '../../models/gift.model';
 import { User } from '../../models/user.model';
 import { MessageService } from 'primeng/api';
-import { forkJoin } from 'rxjs';
+import { forkJoin, firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -18,13 +19,16 @@ export class CartComponent implements OnInit {
   currentUser: User | null = null;
   loading = false;
   selectedPaymentMethod: string | null = null;
+  deliveryAddress: string = '';
   pixKey: string = 'sua-chave-pix@exemplo.com'; // Você pode configurar isso depois
   unavailableItems: Set<number> = new Set();
+  othersCartCount: { [giftId: number]: number } = {}; // Mapa de giftId -> quantidade de outros usuários
 
   constructor(
     private cartService: CartService,
     private giftService: GiftService,
     private userService: UserService,
+    private cartApiService: CartApiService,
     public router: Router,
     private messageService: MessageService
   ) { }
@@ -44,23 +48,53 @@ export class CartComponent implements OnInit {
       if (items.length > 0 && this.currentUser) {
         const unavailable = await this.cartService.checkUnavailableItems();
         this.unavailableItems = new Set(unavailable);
+        
+        // Verificar quantos outros usuários têm cada item no carrinho
+        const giftIds = items.map(item => item.id);
+        try {
+          const othersCount = await firstValueFrom(
+            this.cartApiService.getOthersCartCount(this.currentUser.id, giftIds)
+          );
+          this.othersCartCount = othersCount || {};
+        } catch (error) {
+          console.error('Erro ao verificar outros usuários no carrinho:', error);
+          this.othersCartCount = {};
+        }
       } else {
         this.unavailableItems = new Set();
+        this.othersCartCount = {};
       }
     });
+  }
+
+  getOthersCount(giftId: number): number {
+    return this.othersCartCount[giftId] || 0;
+  }
+
+  hasOthersInCart(giftId: number): boolean {
+    return this.getOthersCount(giftId) > 0;
   }
 
   isUnavailable(giftId: number): boolean {
     return this.unavailableItems.has(giftId);
   }
 
-  removeFromCart(gift: Gift): void {
-    this.cartService.removeFromCart(gift.id);
+  async removeFromCart(gift: Gift): Promise<void> {
+    // Verificar se já está carregando
+    if (this.isRemovingFromCart(gift.id)) {
+      return;
+    }
+
+    await this.cartService.removeFromCart(gift.id);
     this.messageService.add({
       severity: 'info',
       summary: 'Item removido',
       detail: `${gift.name} foi removido do carrinho.`
     });
+  }
+
+  isRemovingFromCart(giftId: number): boolean {
+    return this.cartService.isActionLoading(`remove-${giftId}`);
   }
 
   selectPaymentMethod(method: string): void {
@@ -89,6 +123,16 @@ export class CartComponent implements OnInit {
         severity: 'warn',
         summary: 'Atenção',
         detail: 'Selecione um método de pagamento.'
+      });
+      return;
+    }
+
+    // Validar endereço se necessário
+    if (this.selectedPaymentMethod === 'buy-and-send' && !this.deliveryAddress.trim()) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Atenção',
+        detail: 'Por favor, informe o endereço de entrega.'
       });
       return;
     }
@@ -122,9 +166,14 @@ export class CartComponent implements OnInit {
 
     this.loading = true;
 
-    // Marcar todos os presentes como comprados
+    // Marcar todos os presentes como comprados com informações de pagamento
     const purchaseObservables = this.cartItems.map(gift => 
-      this.giftService.markAsPurchased(gift.id, this.currentUser!.id)
+      this.giftService.markAsPurchased(
+        gift.id, 
+        this.currentUser!.id,
+        this.selectedPaymentMethod || undefined,
+        this.selectedPaymentMethod === 'buy-and-send' ? this.deliveryAddress : undefined
+      )
     );
 
     forkJoin(purchaseObservables).subscribe({

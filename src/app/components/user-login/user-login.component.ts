@@ -74,6 +74,7 @@ export class UserLoginComponent implements OnInit {
           summary: 'Sucesso!',
           detail: 'Login realizado com sucesso!'
         });
+        this.loading = false;
         this.router.navigate(['/']);
       },
       error: (error) => {

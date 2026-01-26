@@ -66,5 +66,18 @@ export class MyGiftsComponent implements OnInit {
       }
     });
   }
+
+  getPaymentMethodLabel(method: string): string {
+    switch (method) {
+      case 'pix':
+        return 'PIX';
+      case 'buy-and-send':
+        return 'Comprar e Enviar para Nossa Casa';
+      case 'buy-and-deliver':
+        return 'Comprar e Entregar no Dia';
+      default:
+        return method;
+    }
+  }
 }
 

@@ -27,6 +27,7 @@
         *ngFor="let gift of gifts" 
         [gift]="gift"
         [currentUser]="currentUser"
+        [isUnpurchasingLoading]="isActionLoading('unpurchase-' + gift.id)"
         (purchase)="openPurchaseDialog(gift)"
         (edit)="openEditDialog(gift)"
         (delete)="confirmDelete(gift)"

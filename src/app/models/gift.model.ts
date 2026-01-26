@@ -8,6 +8,8 @@ export interface Gift {
   isPurchased: boolean;
   purchasedByUserId?: number;
   purchasedBy?: string; // Full name of purchaser
+  paymentMethod?: string; // Método de pagamento escolhido
+  deliveryAddress?: string; // Endereço de entrega (se aplicável)
   createdAt: string;
 }
 
@@ -21,5 +23,7 @@ export interface CreateGift {
 
 export interface MarkPurchased {
   userId: number;
+  paymentMethod?: string;
+  deliveryAddress?: string;
 }
 

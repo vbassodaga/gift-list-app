@@ -94,6 +94,7 @@ export class UserRegisterComponent implements OnInit {
           summary: 'Sucesso!',
           detail: 'Cadastro realizado com sucesso!'
         });
+        this.loading = false;
         this.router.navigate(['/']);
       },
       error: (error) => {

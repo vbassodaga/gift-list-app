@@ -83,6 +83,8 @@
           label="Adicionar ao Carrinho" 
           icon="pi pi-shopping-cart" 
           (onClick)="onPurchase()"
+          [loading]="isAddingToCart()"
+          [disabled]="isAddingToCart()"
           styleClass="w-full p-button-primary">
         </p-button>
         <p-button 
@@ -104,6 +106,8 @@
             label="Remover Marcação" 
             icon="pi pi-times" 
             (onClick)="onUnpurchase()"
+            [loading]="isUnpurchasing()"
+            [disabled]="isUnpurchasing()"
             styleClass="w-full p-button-outlined">
           </p-button>
         </div>

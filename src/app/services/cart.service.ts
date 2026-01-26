@@ -14,6 +14,8 @@ export class CartService {
   public cartItems$: Observable<Gift[]> = this.cartItemsSubject.asObservable();
   private cartGiftIdsSubject = new BehaviorSubject<Set<number>>(new Set());
   public cartGiftIds$: Observable<Set<number>> = this.cartGiftIdsSubject.asObservable();
+  private loadingActionsSubject = new BehaviorSubject<Set<string>>(new Set());
+  public loadingActions$: Observable<Set<string>> = this.loadingActionsSubject.asObservable();
 
   constructor(
     private userService: UserService,
@@ -84,6 +86,15 @@ export class CartService {
       return;
     }
 
+    const actionKey = `add-${gift.id}`;
+    // Verificar se já está carregando
+    if (this.loadingActionsSubject.value.has(actionKey)) {
+      return;
+    }
+
+    // Marcar como carregando
+    this.setLoading(actionKey, true);
+
     try {
       const response = await firstValueFrom(this.cartApiService.addToCart(currentUser.id, gift.id));
       
@@ -111,12 +122,23 @@ export class CartService {
         summary: 'Erro',
         detail: 'Erro ao adicionar item ao carrinho. Tente novamente.'
       });
+    } finally {
+      this.setLoading(actionKey, false);
     }
   }
 
   async removeFromCart(giftId: number): Promise<void> {
     const currentUser = this.userService.currentUser;
     if (!currentUser) return;
+
+    const actionKey = `remove-${giftId}`;
+    // Verificar se já está carregando
+    if (this.loadingActionsSubject.value.has(actionKey)) {
+      return;
+    }
+
+    // Marcar como carregando
+    this.setLoading(actionKey, true);
 
     try {
       await firstValueFrom(this.cartApiService.removeFromCart(currentUser.id, giftId));
@@ -135,6 +157,8 @@ export class CartService {
         summary: 'Erro',
         detail: 'Erro ao remover item do carrinho. Tente novamente.'
       });
+    } finally {
+      this.setLoading(actionKey, false);
     }
   }
 
@@ -170,5 +194,19 @@ export class CartService {
       console.error('Erro ao verificar itens indisponíveis:', error);
       return [];
     }
+  }
+
+  private setLoading(actionKey: string, loading: boolean): void {
+    const current = new Set(this.loadingActionsSubject.value);
+    if (loading) {
+      current.add(actionKey);
+    } else {
+      current.delete(actionKey);
+    }
+    this.loadingActionsSubject.next(current);
+  }
+
+  isActionLoading(actionKey: string): boolean {
+    return this.loadingActionsSubject.value.has(actionKey);
   }
 }

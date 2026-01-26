@@ -47,9 +47,19 @@
                     severity="danger"
                     styleClass="text-xs">
                   </p-tag>
+                  <p-tag 
+                    *ngIf="hasOthersInCart(item.id) && !isUnavailable(item.id)" 
+                    [value]="getOthersCount(item.id) === 1 ? '1 outra pessoa também tem' : getOthersCount(item.id) + ' outras pessoas também têm'"
+                    severity="info"
+                    styleClass="text-xs">
+                  </p-tag>
                 </div>
                 <p *ngIf="isUnavailable(item.id)" class="text-sm text-red-400 mb-2">
                   Este item foi comprado por outra pessoa. Remova-o do carrinho para continuar.
+                </p>
+                <p *ngIf="hasOthersInCart(item.id) && !isUnavailable(item.id)" class="text-sm text-yellow-400 mb-2">
+                  <i class="pi pi-info-circle mr-1"></i>
+                  {{ getOthersCount(item.id) === 1 ? 'Outra pessoa também adicionou este item ao carrinho.' : getOthersCount(item.id) + ' outras pessoas também adicionaram este item ao carrinho.' }}
                 </p>
                 <p class="text-sm text-gray-300 mb-2">{{ item.description || 'Sem descrição disponível.' }}</p>
                 <p *ngIf="item.averagePrice" class="text-base font-semibold text-indigo-400">
@@ -59,6 +69,8 @@
               <p-button 
                 icon="pi pi-trash" 
                 (onClick)="removeFromCart(item)"
+                [loading]="isRemovingFromCart(item.id)"
+                [disabled]="isRemovingFromCart(item.id)"
                 styleClass="p-button-text p-button-danger flex-shrink-0"
                 [pTooltip]="'Remover do carrinho'">
               </p-button>
@@ -114,6 +126,25 @@
                   [class.text-gray-500]="selectedPaymentMethod !== 'buy-and-send'">
                 </i>
               </div>
+            </div>
+
+            <!-- Delivery Address Input (only shown when buy-and-send is selected) -->
+            <div *ngIf="selectedPaymentMethod === 'buy-and-send'" class="mt-4">
+              <label class="block text-sm font-medium text-white mb-2">
+                <i class="pi pi-map-marker mr-2"></i>
+                Endereço de Entrega
+              </label>
+              <textarea
+                pInputTextarea
+                [(ngModel)]="deliveryAddress"
+                placeholder="Digite o endereço completo para entrega..."
+                rows="3"
+                class="w-full"
+                styleClass="w-full">
+              </textarea>
+              <p class="text-xs text-gray-400 mt-1">
+                Informe o endereço completo onde o presente deve ser entregue.
+              </p>
             </div>
 
             <!-- Buy and Deliver Option -->

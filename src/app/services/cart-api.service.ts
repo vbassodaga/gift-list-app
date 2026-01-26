@@ -46,4 +46,8 @@ export class CartApiService {
   checkCartItems(userId: number, giftIds: number[]): Observable<CheckCartResponse> {
     return this.http.post<CheckCartResponse>(`${this.apiUrl}/check`, { userId, giftIds });
   }
+
+  getOthersCartCount(userId: number, giftIds: number[]): Observable<{ [giftId: number]: number }> {
+    return this.http.post<{ [giftId: number]: number }>(`${this.apiUrl}/others`, { userId, giftIds });
+  }
 }

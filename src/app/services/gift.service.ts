@@ -46,8 +46,15 @@ export class GiftService {
     );
   }
 
-  markAsPurchased(id: number, userId: number): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/${id}/purchase`, { userId }).pipe(
+  markAsPurchased(id: number, userId: number, paymentMethod?: string, deliveryAddress?: string): Observable<void> {
+    const body: any = { userId };
+    if (paymentMethod) {
+      body.paymentMethod = paymentMethod;
+    }
+    if (deliveryAddress) {
+      body.deliveryAddress = deliveryAddress;
+    }
+    return this.http.post<void>(`${this.apiUrl}/${id}/purchase`, body).pipe(
       tap(() => this.cacheService.clear(this.CACHE_KEY_GIFTS))
     );
   }

@@ -28,11 +28,36 @@
 
     <!-- Gifts Grid -->
     <div *ngIf="!loading && myGifts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
-      <app-gift-card 
-        *ngFor="let gift of myGifts" 
-        [gift]="gift"
-        (purchase)="null">
-      </app-gift-card>
+      <div *ngFor="let gift of myGifts" class="gift-card-wrapper">
+        <app-gift-card 
+          [gift]="gift"
+          [currentUser]="currentUser"
+          (purchase)="null">
+        </app-gift-card>
+        <!-- Payment and Delivery Info -->
+        <div class="payment-info-card mt-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
+          <h4 class="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+            <i class="pi pi-info-circle text-indigo-400"></i>
+            Informações da Compra
+          </h4>
+          <div class="space-y-2">
+            <div *ngIf="gift.paymentMethod" class="flex items-start gap-2">
+              <i class="pi pi-credit-card text-indigo-400 mt-1"></i>
+              <div>
+                <p class="text-xs text-gray-400">Forma de Pagamento:</p>
+                <p class="text-sm text-white font-medium">{{ getPaymentMethodLabel(gift.paymentMethod) }}</p>
+              </div>
+            </div>
+            <div *ngIf="gift.deliveryAddress" class="flex items-start gap-2 mt-3">
+              <i class="pi pi-map-marker text-indigo-400 mt-1"></i>
+              <div class="flex-grow">
+                <p class="text-xs text-gray-400 mb-1">Endereço de Entrega:</p>
+                <p class="text-sm text-white">{{ gift.deliveryAddress }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

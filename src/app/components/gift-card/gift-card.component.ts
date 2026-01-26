@@ -13,6 +13,7 @@ import { MessageService } from 'primeng/api';
 export class GiftCardComponent {
   @Input() gift!: Gift;
   @Input() currentUser: User | null = null;
+  @Input() isUnpurchasingLoading: boolean = false; // Estado de loading vindo do componente pai
   @Output() purchase = new EventEmitter<Gift>();
   @Output() edit = new EventEmitter<Gift>();
   @Output() delete = new EventEmitter<Gift>();
@@ -20,7 +21,7 @@ export class GiftCardComponent {
 
   constructor(
     public userService: UserService,
-    private cartService: CartService,
+    public cartService: CartService,
     private messageService: MessageService
   ) { }
 
@@ -40,6 +41,11 @@ export class GiftCardComponent {
       return;
     }
 
+    // Verificar se já está carregando
+    if (this.isAddingToCart()) {
+      return;
+    }
+
     // Adicionar ao carrinho (já mostra mensagem se outros usuários têm o item)
     await this.cartService.addToCart(this.gift);
     this.messageService.add({
@@ -47,6 +53,14 @@ export class GiftCardComponent {
       summary: 'Adicionado ao carrinho',
       detail: `${this.gift.name} foi adicionado ao carrinho.`
     });
+  }
+
+  isAddingToCart(): boolean {
+    return this.cartService.isActionLoading(`add-${this.gift.id}`);
+  }
+
+  isUnpurchasing(): boolean {
+    return this.isUnpurchasingLoading;
   }
 
   isInCart(): boolean {
