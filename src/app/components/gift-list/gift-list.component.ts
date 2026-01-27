@@ -207,7 +207,7 @@ export class GiftListComponent implements OnInit {
 
   cancelAdd(): void {
     this.showAddDialog = false;
-    this.newGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined };
+    this.newGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined, deliveryAddress: undefined };
   }
 
   showEditDialog = false;
@@ -270,6 +270,7 @@ export class GiftListComponent implements OnInit {
         this.showEditDialog = false;
         this.editingGift = null;
         this.editGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined, deliveryAddress: undefined };
+        this.newGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined, deliveryAddress: undefined };
         this.loadGifts(true); // Force refresh após editar
         this.actionLoading[actionKey] = false;
       },
@@ -289,7 +290,7 @@ export class GiftListComponent implements OnInit {
   cancelEdit(): void {
     this.showEditDialog = false;
     this.editingGift = null;
-    this.editGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined };
+    this.editGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined, deliveryAddress: undefined };
   }
 
   confirmDelete(gift: Gift): void {
