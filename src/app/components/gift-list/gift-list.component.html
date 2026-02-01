@@ -15,6 +15,20 @@
       </p-button>
     </div>
 
+    <!-- Price Filter -->
+    <div class="mb-6 flex justify-end items-center gap-3">
+      <label class="text-sm font-medium text-white">Filtrar por preço:</label>
+      <p-dropdown 
+        [(ngModel)]="priceFilter"
+        [options]="priceFilterOptions"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Selecione um filtro"
+        (onChange)="onPriceFilterChange()"
+        styleClass="w-48">
+      </p-dropdown>
+    </div>
+
     <!-- Loading State -->
     <div *ngIf="loading" class="text-center py-12">
       <i class="pi pi-spin pi-spinner text-4xl text-indigo-400"></i>
@@ -24,7 +38,7 @@
     <!-- Gift Grid -->
     <div *ngIf="!loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
       <app-gift-card 
-        *ngFor="let gift of gifts" 
+        *ngFor="let gift of filteredGifts" 
         [gift]="gift"
         [currentUser]="currentUser"
         [isUnpurchasingLoading]="isActionLoading('unpurchase-' + gift.id)"
@@ -36,7 +50,7 @@
     </div>
 
     <!-- Empty State -->
-    <div *ngIf="!loading && gifts.length === 0" class="empty-state animate-fade-in">
+    <div *ngIf="!loading && filteredGifts.length === 0" class="empty-state animate-fade-in">
       <i class="pi pi-gift text-6xl text-gray-600 mb-4"></i>
       <p class="text-xl text-gray-400">Nenhum presente na lista ainda.</p>
       <p class="text-gray-500 mt-2">Clique em "Adicionar Novo Presente" para começar!</p>

@@ -13,8 +13,15 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 })
 export class GiftListComponent implements OnInit {
   gifts: Gift[] = [];
+  filteredGifts: Gift[] = [];
   loading = false;
   showAddDialog = false;
+  priceFilter: string = 'none'; // 'none', 'lowest', 'highest'
+  priceFilterOptions = [
+    { label: 'Sem filtro', value: 'none' },
+    { label: 'Menor preço', value: 'lowest' },
+    { label: 'Maior preço', value: 'highest' }
+  ];
   newGift = {
     name: '',
     description: '',
@@ -54,6 +61,7 @@ export class GiftListComponent implements OnInit {
     this.giftService.getGifts(!forceRefresh).subscribe({
       next: (gifts) => {
         this.gifts = gifts;
+        this.applyPriceFilter();
         this.loading = false;
         // Recarregar carrinho do backend após carregar presentes
         if (this.currentUser) {
@@ -421,6 +429,33 @@ export class GiftListComponent implements OnInit {
 
   isActionLoading(actionKey: string): boolean {
     return this.actionLoading[actionKey] === true;
+  }
+
+  applyPriceFilter(): void {
+    if (this.priceFilter === 'none') {
+      this.filteredGifts = [...this.gifts];
+      return;
+    }
+
+    // Filtrar apenas presentes com preço definido
+    const giftsWithPrice = this.gifts.filter(g => g.averagePrice !== undefined && g.averagePrice !== null);
+    const giftsWithoutPrice = this.gifts.filter(g => g.averagePrice === undefined || g.averagePrice === null);
+
+    if (this.priceFilter === 'lowest') {
+      // Ordenar do menor para o maior preço
+      giftsWithPrice.sort((a, b) => (a.averagePrice || 0) - (b.averagePrice || 0));
+      this.filteredGifts = [...giftsWithPrice, ...giftsWithoutPrice];
+    } else if (this.priceFilter === 'highest') {
+      // Ordenar do maior para o menor preço
+      giftsWithPrice.sort((a, b) => (b.averagePrice || 0) - (a.averagePrice || 0));
+      this.filteredGifts = [...giftsWithPrice, ...giftsWithoutPrice];
+    } else {
+      this.filteredGifts = [...this.gifts];
+    }
+  }
+
+  onPriceFilterChange(): void {
+    this.applyPriceFilter();
   }
 }
 
