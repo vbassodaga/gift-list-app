@@ -32,6 +32,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { SidebarModule } from 'primeng/sidebar';
 import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmationService } from 'primeng/api';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { ConfirmationService } from 'primeng/api';
     TagModule,
     ConfirmDialogModule,
     SidebarModule,
-    TooltipModule
+    TooltipModule,
+    RadioButtonModule
   ],
   providers: [MessageService, ConfirmationService],
   bootstrap: [AppComponent]

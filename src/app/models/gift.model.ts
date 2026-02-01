@@ -10,6 +10,7 @@ export interface Gift {
   purchasedBy?: string; // Full name of purchaser
   paymentMethod?: string; // Método de pagamento escolhido
   deliveryAddress?: string; // Endereço de entrega (se aplicável)
+  isIllustrativeImage?: boolean; // Indica se a foto é meramente ilustrativa
   createdAt: string;
 }
 
@@ -20,6 +21,7 @@ export interface CreateGift {
   averagePrice?: number; // Valor médio em centavos
   linkUrl?: string; // Link para acessar o produto em outro site
   deliveryAddress?: string; // Endereço fixo de entrega (definido pelo admin)
+  isIllustrativeImage?: boolean; // Indica se a foto é meramente ilustrativa
 }
 
 export interface MarkPurchased {

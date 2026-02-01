@@ -114,6 +114,30 @@
         </textarea>
         <p class="text-xs text-gray-400 mt-1">Endereço fixo que será usado quando alguém escolher "Comprar e Enviar" (opcional)</p>
       </div>
+      <div>
+        <label class="block text-sm font-medium text-white mb-2">Foto Ilustrativa</label>
+        <div class="flex gap-4">
+          <div class="flex items-center">
+            <p-radiobutton 
+              name="isIllustrativeImage" 
+              value="false" 
+              [(ngModel)]="newGiftIllustrativeImage"
+              inputId="illustrative-false">
+            </p-radiobutton>
+            <label for="illustrative-false" class="ml-2 text-white cursor-pointer">Não (Foto do produto real)</label>
+          </div>
+          <div class="flex items-center">
+            <p-radiobutton 
+              name="isIllustrativeImage" 
+              value="true" 
+              [(ngModel)]="newGiftIllustrativeImage"
+              inputId="illustrative-true">
+            </p-radiobutton>
+            <label for="illustrative-true" class="ml-2 text-white cursor-pointer">Sim (Foto meramente ilustrativa)</label>
+          </div>
+        </div>
+        <p class="text-xs text-gray-400 mt-1">Indique se a foto é meramente ilustrativa ou se representa o produto real</p>
+      </div>
     </div>
     <ng-template pTemplate="footer">
       <div class="flex gap-3 justify-end">
@@ -244,6 +268,30 @@
           class="w-full">
         </textarea>
         <p class="text-xs text-gray-400 mt-1">Endereço fixo que será usado quando alguém escolher "Comprar e Enviar" (opcional)</p>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-white mb-2">Foto Ilustrativa</label>
+        <div class="flex gap-4">
+          <div class="flex items-center">
+            <p-radioButton 
+              name="isIllustrativeImageEdit" 
+              value="false" 
+              [(ngModel)]="editGiftIllustrativeImage"
+              inputId="illustrative-false-edit">
+            </p-radioButton>
+            <label for="illustrative-false-edit" class="ml-2 text-white cursor-pointer">Não (Foto do produto real)</label>
+          </div>
+          <div class="flex items-center">
+            <p-radioButton 
+              name="isIllustrativeImageEdit" 
+              value="true" 
+              [(ngModel)]="editGiftIllustrativeImage"
+              inputId="illustrative-true-edit">
+            </p-radioButton>
+            <label for="illustrative-true-edit" class="ml-2 text-white cursor-pointer">Sim (Foto meramente ilustrativa)</label>
+          </div>
+        </div>
+        <p class="text-xs text-gray-400 mt-1">Indique se a foto é meramente ilustrativa ou se representa o produto real</p>
       </div>
     </div>
     <ng-template pTemplate="footer">

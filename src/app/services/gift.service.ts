@@ -39,7 +39,7 @@ export class GiftService {
     );
   }
 
-  updateGift(id: number, gift: { name?: string; description?: string; imageUrl?: string; averagePrice?: number; linkUrl?: string; deliveryAddress?: string }, userId: number): Observable<void> {
+  updateGift(id: number, gift: { name?: string; description?: string; imageUrl?: string; averagePrice?: number; linkUrl?: string; deliveryAddress?: string; isIllustrativeImage?: boolean }, userId: number): Observable<void> {
     const params = new HttpParams().set('userId', userId.toString());
     return this.http.put<void>(`${this.apiUrl}/${id}`, gift, { params }).pipe(
       tap(() => this.cacheService.clear(this.CACHE_KEY_GIFTS))

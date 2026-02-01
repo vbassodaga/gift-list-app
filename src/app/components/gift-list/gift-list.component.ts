@@ -21,12 +21,15 @@ export class GiftListComponent implements OnInit {
     imageUrl: '',
     averagePrice: undefined as number | undefined,
     linkUrl: undefined as string | undefined,
-    deliveryAddress: undefined as string | undefined
+    deliveryAddress: undefined as string | undefined,
+    isIllustrativeImage: false as boolean
   };
   purchaseDialogVisible = false;
   selectedGift: Gift | null = null;
   currentUser: User | null = null;
   actionLoading: { [key: string]: boolean } = {}; // Para controlar loading de ações específicas
+  newGiftIllustrativeImage: string = 'false'; // Modelo auxiliar para radio button
+  editGiftIllustrativeImage: string = 'false'; // Modelo auxiliar para radio button
 
   constructor(
     private giftService: GiftService,
@@ -174,9 +177,11 @@ export class GiftListComponent implements OnInit {
     if (this.actionLoading['addGift']) return; // Prevenir múltiplos cliques
 
     // Converter preço de reais para centavos se fornecido
+    // Converter string do radio button para boolean
     const giftToCreate = {
       ...this.newGift,
-      averagePrice: this.newGift.averagePrice ? Math.round(this.newGift.averagePrice * 100) : undefined
+      averagePrice: this.newGift.averagePrice ? Math.round(this.newGift.averagePrice * 100) : undefined,
+      isIllustrativeImage: this.newGiftIllustrativeImage === 'true'
     };
 
     this.actionLoading['addGift'] = true;
@@ -188,7 +193,8 @@ export class GiftListComponent implements OnInit {
           detail: 'Presente adicionado com sucesso!'
         });
         this.showAddDialog = false;
-        this.newGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined, deliveryAddress: undefined };
+        this.newGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined, deliveryAddress: undefined, isIllustrativeImage: false };
+        this.newGiftIllustrativeImage = 'false';
         this.loadGifts(true); // Force refresh após adicionar
         this.actionLoading['addGift'] = false;
       },
@@ -207,7 +213,8 @@ export class GiftListComponent implements OnInit {
 
   cancelAdd(): void {
     this.showAddDialog = false;
-    this.newGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined, deliveryAddress: undefined };
+    this.newGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined, deliveryAddress: undefined, isIllustrativeImage: false };
+    this.newGiftIllustrativeImage = 'false';
   }
 
   showEditDialog = false;
@@ -218,7 +225,8 @@ export class GiftListComponent implements OnInit {
     imageUrl: '',
     averagePrice: undefined as number | undefined,
     linkUrl: undefined as string | undefined,
-    deliveryAddress: undefined as string | undefined
+    deliveryAddress: undefined as string | undefined,
+    isIllustrativeImage: false as boolean
   };
 
   openEditDialog(gift: Gift): void {
@@ -238,8 +246,10 @@ export class GiftListComponent implements OnInit {
       imageUrl: gift.imageUrl,
       averagePrice: gift.averagePrice ? gift.averagePrice / 100 : undefined,
       linkUrl: gift.linkUrl || undefined,
-      deliveryAddress: gift.deliveryAddress || undefined
+      deliveryAddress: gift.deliveryAddress || undefined,
+      isIllustrativeImage: gift.isIllustrativeImage || false
     };
+    this.editGiftIllustrativeImage = (gift.isIllustrativeImage || false) ? 'true' : 'false';
     this.showEditDialog = true;
   }
 
@@ -254,9 +264,11 @@ export class GiftListComponent implements OnInit {
     if (this.actionLoading[actionKey]) return; // Prevenir múltiplos cliques
 
     // Converter preço de reais para centavos se fornecido
+    // Converter string do radio button para boolean
     const giftToUpdate = {
       ...this.editGift,
-      averagePrice: this.editGift.averagePrice ? Math.round(this.editGift.averagePrice * 100) : undefined
+      averagePrice: this.editGift.averagePrice ? Math.round(this.editGift.averagePrice * 100) : undefined,
+      isIllustrativeImage: this.editGiftIllustrativeImage === 'true'
     };
 
     this.actionLoading[actionKey] = true;
@@ -269,8 +281,9 @@ export class GiftListComponent implements OnInit {
         });
         this.showEditDialog = false;
         this.editingGift = null;
-        this.editGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined, deliveryAddress: undefined };
-        this.newGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined, deliveryAddress: undefined };
+        this.editGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined, deliveryAddress: undefined, isIllustrativeImage: false };
+        this.editGiftIllustrativeImage = 'false';
+        this.newGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined, deliveryAddress: undefined, isIllustrativeImage: false };
         this.loadGifts(true); // Force refresh após editar
         this.actionLoading[actionKey] = false;
       },
@@ -290,7 +303,8 @@ export class GiftListComponent implements OnInit {
   cancelEdit(): void {
     this.showEditDialog = false;
     this.editingGift = null;
-    this.editGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined, deliveryAddress: undefined };
+    this.editGift = { name: '', description: '', imageUrl: '', averagePrice: undefined, linkUrl: undefined, deliveryAddress: undefined, isIllustrativeImage: false };
+    this.editGiftIllustrativeImage = 'false';
   }
 
   confirmDelete(gift: Gift): void {
