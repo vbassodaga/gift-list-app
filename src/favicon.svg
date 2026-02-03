@@ -1,0 +1,24 @@
+<svg 
+  width="32" 
+  height="32" 
+  viewBox="0 0 24 24" 
+  fill="none" 
+  xmlns="http://www.w3.org/2000/svg">
+  <!-- Fundo -->
+  <rect width="24" height="24" rx="2" fill="#1a1a1a"/>
+  
+  <!-- Casa/Presente - Base simplificada -->
+  <rect x="4" y="10" width="16" height="12" rx="1" stroke="#6366f1" stroke-width="2" fill="#6366f1" fill-opacity="0.2"/>
+  
+  <!-- Telhado da casa -->
+  <path d="M3 10 L12 3 L21 10" stroke="#6366f1" stroke-width="2" stroke-linejoin="round" fill="#6366f1" fill-opacity="0.2"/>
+  
+  <!-- Laço do presente - minimalista -->
+  <rect x="10" y="2" width="4" height="2" rx="0.5" fill="#8b5cf6"/>
+  <rect x="11.5" y="1" width="1" height="4" rx="0.5" fill="#8b5cf6"/>
+  
+  <!-- Lista dentro - linhas simples -->
+  <line x1="6" y1="13" x2="8" y2="13" stroke="#0ec8e0" stroke-width="2" stroke-linecap="round"/>
+  <line x1="6" y1="16" x2="9" y2="16" stroke="#0ec8e0" stroke-width="2" stroke-linecap="round"/>
+  <line x1="6" y1="19" x2="8" y2="19" stroke="#0ec8e0" stroke-width="2" stroke-linecap="round"/>
+</svg>

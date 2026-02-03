@@ -13,6 +13,7 @@ import { HomeComponent } from './components/home/home.component';
 import { CountdownComponent } from './components/countdown/countdown.component';
 import { SidebarMenuComponent } from './components/sidebar-menu/sidebar-menu.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { LogoComponent } from './components/navbar/logo.component';
 import { MyGiftsComponent } from './components/my-gifts/my-gifts.component';
 import { AuthSelectComponent } from './components/auth-select/auth-select.component';
 import { UserLoginComponent } from './components/user-login/user-login.component';
@@ -45,6 +46,7 @@ import { DropdownModule } from 'primeng/dropdown';
     CountdownComponent,
     SidebarMenuComponent,
     NavbarComponent,
+    LogoComponent,
     MyGiftsComponent,
     AuthSelectComponent,
     UserLoginComponent,

@@ -19,7 +19,7 @@ export class CartComponent implements OnInit {
   currentUser: User | null = null;
   loading = false;
   selectedPaymentMethod: string | null = null;
-  pixKey: string = 'sua-chave-pix@exemplo.com'; // Você pode configurar isso depois
+  pixKey: string = '50315341840'; // Você pode configurar isso depois
   unavailableItems: Set<number> = new Set();
   othersCartCount: { [giftId: number]: number } = {}; // Mapa de giftId -> quantidade de outros usuários
 

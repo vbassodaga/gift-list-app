@@ -1,9 +1,11 @@
 <nav class="navbar animate-fade-in" *ngIf="currentUser$ | async">
   <div class="navbar-container">
     <div class="navbar-brand">
-      <span class="brand-icon"><i class="pi pi-home text-6xl text-indigo-400"></i></span>
-      <span class="brand-text">Presen</span>
-      <span class="second-brand-text">teou</span>
+      <span class="brand-icon"><app-logo></app-logo></span>
+      <div>
+        <span class="brand-text">Presen</span>
+        <span class="second-brand-text">teou</span>
+      </div>
     </div>
     
     <div class="navbar-menu">
