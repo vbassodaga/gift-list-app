@@ -12,7 +12,7 @@
   </section>
 
   <!-- Mobile Navigation Carousel -->
-  <section class="mobile-nav-carousel-section">
+  <section class="mobile-nav-carousel-section" *ngIf="currentUser$ | async">
     <div class="mobile-nav-container">
       <div class="mobile-nav-scroll">
         <button 
