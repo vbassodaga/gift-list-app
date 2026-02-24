@@ -71,6 +71,11 @@
         </button>
       </div>
 
+      <!-- Forgot Password Link -->
+      <div class="forgot-password-link">
+        <a (click)="openForgotPasswordDialog()" class="link">Esqueci minha senha</a>
+      </div>
+
       <!-- Register Link -->
       <div class="register-link">
         <p class="link-text">
@@ -80,5 +85,83 @@
       </div>
     </form>
   </div>
+
+  <!-- Forgot Password Dialog -->
+  <p-dialog 
+    [(visible)]="showForgotPasswordDialog" 
+    header="Redefinir Senha" 
+    [modal]="true" 
+    [style]="{width: '95%', maxWidth: '400px'}"
+    [closable]="true"
+    [breakpoints]="{'960px': '95%'}"
+    [draggable]="false"
+    [resizable]="false">
+    <div class="flex flex-col gap-4">
+      <p class="text-white text-sm">
+        Digite seu telefone para redefinir sua senha.
+      </p>
+      
+      <div>
+        <label class="block text-sm font-medium text-white mb-2">Telefone (com DDD) *</label>
+        <input 
+          type="text" 
+          pInputText 
+          [(ngModel)]="forgotPasswordPhone"
+          (input)="formatForgotPasswordPhone($event)"
+          placeholder="(00) 00000-0000"
+          maxlength="15"
+          class="w-full" />
+      </div>
+
+      <div *ngIf="showNewPasswordForm">
+        <label class="block text-sm font-medium text-white mb-2">Nova Senha *</label>
+        <input 
+          type="password" 
+          pInputText 
+          [(ngModel)]="newPassword"
+          placeholder="Digite sua nova senha"
+          class="w-full" />
+        <p class="text-xs text-gray-400 mt-1">A senha deve ter pelo menos 6 caracteres</p>
+      </div>
+
+      <div *ngIf="showNewPasswordForm">
+        <label class="block text-sm font-medium text-white mb-2">Confirmar Nova Senha *</label>
+        <input 
+          type="password" 
+          pInputText 
+          [(ngModel)]="confirmNewPassword"
+          placeholder="Confirme sua nova senha"
+          class="w-full" />
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <div class="flex gap-3 justify-end">
+        <p-button 
+          label="Cancelar" 
+          icon="pi pi-times" 
+          (onClick)="closeForgotPasswordDialog()"
+          styleClass="p-button-text">
+        </p-button>
+        <p-button 
+          *ngIf="!showNewPasswordForm"
+          label="Verificar" 
+          icon="pi pi-check" 
+          (onClick)="verifyPhoneForPasswordReset()"
+          [loading]="verifyingPhone"
+          [disabled]="verifyingPhone || !forgotPasswordPhone"
+          styleClass="p-button-primary">
+        </p-button>
+        <p-button 
+          *ngIf="showNewPasswordForm"
+          label="Redefinir Senha" 
+          icon="pi pi-check" 
+          (onClick)="resetPassword()"
+          [loading]="resettingPassword"
+          [disabled]="resettingPassword || !newPassword || !confirmNewPassword || newPassword !== confirmNewPassword || newPassword.length < 6"
+          styleClass="p-button-primary">
+        </p-button>
+      </div>
+    </ng-template>
+  </p-dialog>
 </div>
 

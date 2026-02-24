@@ -120,5 +120,16 @@ export class UserService {
   canPurchaseGifts(): boolean {
     return this.isLoggedIn() && !this.isAdmin();
   }
+
+  verifyPhoneForPasswordReset(phoneNumber: string): Observable<{ success: boolean }> {
+    return this.http.post<{ success: boolean }>(`${this.apiUrl}/forgot-password`, { phoneNumber });
+  }
+
+  resetPassword(phoneNumber: string, newPassword: string): Observable<{ success: boolean }> {
+    return this.http.post<{ success: boolean }>(`${this.apiUrl}/reset-password`, { 
+      phoneNumber, 
+      newPassword 
+    });
+  }
 }
 
